@@ -15,6 +15,13 @@ import NotFound from "./pages/NotFound";
 
 // Tool Pages - Lazy loaded
 const PersonalBranding = lazy(() => import("./pages/tools/PersonalBranding"));
+const StudyNotes = lazy(() => import("./pages/tools/StudyNotes"));
+const BusinessNames = lazy(() => import("./pages/tools/BusinessNames"));
+const MemeMarketing = lazy(() => import("./pages/tools/MemeMarketing"));
+const BusinessIdeas = lazy(() => import("./pages/tools/BusinessIdeas"));
+const HookGenerator = lazy(() => import("./pages/tools/HookGenerator"));
+const WhatsAppMarketing = lazy(() => import("./pages/tools/WhatsAppMarketing"));
+const YouTubeBranding = lazy(() => import("./pages/tools/YouTubeBranding"));
 
 const queryClient = new QueryClient();
 
@@ -35,6 +42,62 @@ const App = () => (
               element={
                 <Suspense fallback={<div>Loading...</div>}>
                   <PersonalBranding />
+                </Suspense>
+              } 
+            />
+            <Route 
+              path="/tools/study-notes" 
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <StudyNotes />
+                </Suspense>
+              } 
+            />
+            <Route 
+              path="/tools/business-names" 
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <BusinessNames />
+                </Suspense>
+              } 
+            />
+            <Route 
+              path="/tools/meme-marketing" 
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <MemeMarketing />
+                </Suspense>
+              } 
+            />
+            <Route 
+              path="/tools/business-ideas" 
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <BusinessIdeas />
+                </Suspense>
+              } 
+            />
+            <Route 
+              path="/tools/hook-generator" 
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <HookGenerator />
+                </Suspense>
+              } 
+            />
+            <Route 
+              path="/tools/whatsapp-marketing" 
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <WhatsAppMarketing />
+                </Suspense>
+              } 
+            />
+            <Route 
+              path="/tools/youtube-branding" 
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <YouTubeBranding />
                 </Suspense>
               } 
             />
