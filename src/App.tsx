@@ -1,8 +1,9 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 // Layouts
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             
             {/* Tool Routes */}
+            <Route path="/tools" element={<Navigate to="/tools/personal-branding" />} />
             <Route 
               path="/tools/personal-branding" 
               element={
@@ -50,7 +52,7 @@ const App = () => (
             <Route path="/blog" element={<NotFound />} />
             <Route path="/pricing" element={<NotFound />} />
             <Route path="/about" element={<NotFound />} />
-            <Route path="/contact" element={<NotFound />} />
+            <Route path="/contact" element={<Navigate to="/" />} />
             <Route path="/privacy" element={<NotFound />} />
             <Route path="/terms" element={<NotFound />} />
             

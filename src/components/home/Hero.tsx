@@ -10,7 +10,7 @@ export default function Hero() {
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center animate-fade-in">
           <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-            Powered by OpenRouter GPT-4
+            Powered by Zyfoox
           </div>
           
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 mx-auto max-w-5xl">
@@ -23,7 +23,7 @@ export default function Hero() {
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              to="/tools/personal-branding"
+              to="/tools"
               className="px-6 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium flex items-center"
             >
               Try Our Tools
@@ -41,8 +41,8 @@ export default function Hero() {
         <div className="mt-16 glass-card rounded-2xl p-2 shadow-sm animate-fade-in animate-delay-100">
           <div className="aspect-video rounded-xl overflow-hidden bg-secondary">
             <img 
-              src="https://placehold.co/1200x675/f5f7fa/a2aebb"
-              alt="Zyfoox platform interface"
+              src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1200&h=675"
+              alt="Zyfoox AI tools interface"
               className="w-full h-full object-cover"
               loading="lazy"
             />

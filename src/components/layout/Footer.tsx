@@ -14,7 +14,8 @@ export default function Footer() {
               Zyfoox
             </Link>
             <p className="text-muted-foreground mt-2 mb-4">
-              AI-powered tools to supercharge your digital presence, content creation, and business.
+              AI-powered tools to supercharge your digital presence, content creation, and business. 
+              All our tools are completely free to use with no limitations.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Twitter">
@@ -99,7 +100,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Pricing
+                  Free Access
                 </Link>
               </li>
               <li>
@@ -113,7 +114,7 @@ export default function Footer() {
 
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-muted-foreground text-sm">
-            &copy; {currentYear} Zyfoox. All rights reserved.
+            &copy; {currentYear} Zyfoox. All rights reserved. All tools are completely free.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">

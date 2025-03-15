@@ -47,7 +47,7 @@ export default function Index() {
                   </li>
                 </ul>
                 <a 
-                  href="/tools/personal-branding" 
+                  href="/tools" 
                   className="inline-block px-6 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium"
                 >
                   Try for Free
@@ -56,8 +56,8 @@ export default function Index() {
               <div className="relative">
                 <div className="aspect-square rounded-2xl overflow-hidden bg-secondary">
                   <img 
-                    src="https://placehold.co/800x800/f5f7fa/a2aebb"
-                    alt="AI tool demonstration"
+                    src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&h=800"
+                    alt="AI tools for business professionals"
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
