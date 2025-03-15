@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +11,9 @@ import Layout from "./components/layout/Layout";
 // Pages
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import About from "./pages/About";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 // Tool Pages - Lazy loaded
 const PersonalBranding = lazy(() => import("./pages/tools/PersonalBranding"));
@@ -34,6 +36,11 @@ const App = () => (
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
+            
+            {/* About and Blog Routes */}
+            <Route path="/about" element={<About />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
             
             {/* Tool Routes */}
             <Route path="/tools" element={<Navigate to="/tools/personal-branding" />} />
@@ -102,19 +109,8 @@ const App = () => (
               } 
             />
             
-            {/* Placeholder Routes */}
-            <Route path="/tools/study-notes" element={<NotFound />} />
-            <Route path="/tools/business-names" element={<NotFound />} />
-            <Route path="/tools/meme-marketing" element={<NotFound />} />
-            <Route path="/tools/business-ideas" element={<NotFound />} />
-            <Route path="/tools/hook-generator" element={<NotFound />} />
-            <Route path="/tools/whatsapp-marketing" element={<NotFound />} />
-            <Route path="/tools/youtube-branding" element={<NotFound />} />
-            
             {/* Other Routes */}
-            <Route path="/blog" element={<NotFound />} />
             <Route path="/pricing" element={<NotFound />} />
-            <Route path="/about" element={<NotFound />} />
             <Route path="/contact" element={<Navigate to="/" />} />
             <Route path="/privacy" element={<NotFound />} />
             <Route path="/terms" element={<NotFound />} />
