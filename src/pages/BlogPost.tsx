@@ -5,7 +5,7 @@ import { Calendar, User, Tag, ArrowLeft, Share2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { getPostById, getPostsByTool, BlogPost } from "@/data/blogPosts";
+import { getPostById, getPostsByTool, type BlogPost as BlogPostType } from "@/data/blogPosts";
 
 function renderMarkdown(content: string) {
   // Very basic markdown parsing for demonstration
@@ -36,8 +36,8 @@ function renderMarkdown(content: string) {
 
 export default function BlogPost() {
   const { id = "" } = useParams<{ id: string }>();
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
+  const [post, setPost] = useState<BlogPostType | null>(null);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPostType[]>([]);
   const navigate = useNavigate();
   
   useEffect(() => {
