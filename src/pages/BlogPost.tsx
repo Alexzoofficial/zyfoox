@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getPostById, getPostsByTool, type BlogPost as BlogPostType } from "@/data/blogPosts";
+import { Helmet } from "react-helmet-async";
 
 function renderMarkdown(content: string) {
   // Very basic markdown parsing for demonstration
@@ -87,111 +88,140 @@ export default function BlogPost() {
   };
   
   return (
-    <div className="container mx-auto px-4 py-16 max-w-5xl">
-      <div className="mb-6">
-        <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-4">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Blog
-        </Button>
+    <>
+      <Helmet>
+        <title>{post.title} | AIToolbox Blog</title>
+        <meta name="description" content={post.excerpt} />
+        <meta name="keywords" content={post.tags.join(', ') + ', AI tools, ' + formatToolName(post.tool)} />
+        <link rel="canonical" href={`https://aitoolbox.com/blog/${post.id}`} />
         
-        <div className="flex flex-wrap gap-2 mb-4">
-          <Link to={`/tools/${post.tool}`}>
-            <Badge variant="secondary">
-              {formatToolName(post.tool)}
+        {/* Open Graph tags */}
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.excerpt} />
+        <meta property="og:image" content={post.imageUrl} />
+        <meta property="og:url" content={`https://aitoolbox.com/blog/${post.id}`} />
+        <meta property="og:type" content="article" />
+        
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.excerpt} />
+        <meta name="twitter:image" content={post.imageUrl} />
+        
+        {/* Article specific metadata */}
+        <meta property="article:published_time" content={post.date} />
+        <meta property="article:author" content={post.author} />
+        {post.tags.map((tag, index) => (
+          <meta key={index} property="article:tag" content={tag} />
+        ))}
+      </Helmet>
+    
+      <div className="container mx-auto px-4 py-16 max-w-5xl">
+        <div className="mb-6">
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-4">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Blog
+          </Button>
+          
+          <div className="flex flex-wrap gap-2 mb-4">
+            <Link to={`/tools/${post.tool}`}>
+              <Badge variant="secondary">
+                {formatToolName(post.tool)}
+              </Badge>
+            </Link>
+            <Badge variant="outline">
+              {post.category}
             </Badge>
-          </Link>
-          <Badge variant="outline">
-            {post.category}
-          </Badge>
-        </div>
-        
-        <h1 className="text-3xl md:text-4xl font-bold mb-4">{post.title}</h1>
-        
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground mb-6">
-          <div className="flex items-center">
-            <User className="h-4 w-4 mr-2" />
-            {post.author}
           </div>
-          <div className="flex items-center">
-            <Calendar className="h-4 w-4 mr-2" />
-            {post.date}
-          </div>
-          <button onClick={shareArticle} className="flex items-center hover:text-primary">
-            <Share2 className="h-4 w-4 mr-2" />
-            Share
-          </button>
-        </div>
-      </div>
-      
-      <div className="mb-8">
-        <img 
-          src={post.imageUrl} 
-          alt={post.title}
-          className="w-full h-[400px] object-cover rounded-xl"
-        />
-      </div>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div className="lg:col-span-3">
-          <div className="glass-card rounded-xl p-6 mb-8">
-            <div 
-              className="prose prose-lg max-w-none dark:prose-invert"
-              dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }}
-            />
-            
-            <Separator className="my-8" />
-            
-            <div className="flex flex-wrap gap-2 my-4">
-              {post.tags.map(tag => (
-                <Link to={`/blog?tag=${tag}`} key={tag}>
-                  <Badge variant="outline" className="cursor-pointer">
-                    <Tag className="h-3 w-3 mr-1" />
-                    {tag}
-                  </Badge>
-                </Link>
-              ))}
+          
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">{post.title}</h1>
+          
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground mb-6">
+            <div className="flex items-center">
+              <User className="h-4 w-4 mr-2" />
+              {post.author}
             </div>
+            <div className="flex items-center">
+              <Calendar className="h-4 w-4 mr-2" />
+              {post.date}
+            </div>
+            <button onClick={shareArticle} className="flex items-center hover:text-primary">
+              <Share2 className="h-4 w-4 mr-2" />
+              Share
+            </button>
           </div>
         </div>
         
-        <div className="lg:col-span-1">
-          <div className="glass-card rounded-xl p-6 sticky top-24">
-            <h3 className="text-lg font-semibold mb-4">Related Articles</h3>
-            
-            {relatedPosts.length > 0 ? (
-              <div className="space-y-4">
-                {relatedPosts.map(relatedPost => (
-                  <Link to={`/blog/${relatedPost.id}`} key={relatedPost.id} className="block">
-                    <div className="group">
-                      <img 
-                        src={relatedPost.imageUrl} 
-                        alt={relatedPost.title}
-                        className="w-full h-32 object-cover rounded-md mb-2"
-                      />
-                      <h4 className="font-medium group-hover:text-primary transition-colors">
-                        {relatedPost.title}
-                      </h4>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {relatedPost.date}
-                      </p>
-                    </div>
+        <div className="mb-8">
+          <img 
+            src={post.imageUrl} 
+            alt={post.title}
+            className="w-full h-[400px] object-cover rounded-xl"
+          />
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="lg:col-span-3">
+            <div className="glass-card rounded-xl p-6 mb-8">
+              <div 
+                className="prose prose-lg max-w-none dark:prose-invert"
+                dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }}
+              />
+              
+              <Separator className="my-8" />
+              
+              <div className="flex flex-wrap gap-2 my-4">
+                {post.tags.map(tag => (
+                  <Link to={`/blog?tag=${tag}`} key={tag}>
+                    <Badge variant="outline" className="cursor-pointer">
+                      <Tag className="h-3 w-3 mr-1" />
+                      {tag}
+                    </Badge>
                   </Link>
                 ))}
               </div>
-            ) : (
-              <p className="text-muted-foreground">No related articles found.</p>
-            )}
-            
-            <div className="mt-6">
-              <Link to={`/tools/${post.tool}`}>
-                <Button className="w-full">
-                  Try {formatToolName(post.tool)} Tool
-                </Button>
-              </Link>
+            </div>
+          </div>
+          
+          <div className="lg:col-span-1">
+            <div className="glass-card rounded-xl p-6 sticky top-24">
+              <h3 className="text-lg font-semibold mb-4">Related Articles</h3>
+              
+              {relatedPosts.length > 0 ? (
+                <div className="space-y-4">
+                  {relatedPosts.map(relatedPost => (
+                    <Link to={`/blog/${relatedPost.id}`} key={relatedPost.id} className="block">
+                      <div className="group">
+                        <img 
+                          src={relatedPost.imageUrl} 
+                          alt={relatedPost.title}
+                          className="w-full h-32 object-cover rounded-md mb-2"
+                        />
+                        <h4 className="font-medium group-hover:text-primary transition-colors">
+                          {relatedPost.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {relatedPost.date}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted-foreground">No related articles found.</p>
+              )}
+              
+              <div className="mt-6">
+                <Link to={`/tools/${post.tool}`}>
+                  <Button className="w-full">
+                    Try {formatToolName(post.tool)} Tool
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
