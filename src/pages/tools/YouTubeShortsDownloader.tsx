@@ -2,7 +2,7 @@
 import { Helmet } from "react-helmet-async";
 import ToolHero from "@/components/tools/ToolHero";
 import DownloaderInterface from "@/components/tools/DownloaderInterface";
-import { VideoVertical } from "lucide-react";
+import { MoveVertical } from "lucide-react";
 
 export default function YouTubeShortsDownloader() {
   const formats = [
@@ -41,7 +41,7 @@ export default function YouTubeShortsDownloader() {
       <ToolHero
         title="YouTube Shorts Downloader"
         description="Download YouTube Shorts videos without watermark. Free online tool, no registration required."
-        icon={<VideoVertical size={24} />}
+        icon={<MoveVertical size={24} />}
       />
 
       <DownloaderInterface

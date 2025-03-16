@@ -2,7 +2,7 @@
 import { Helmet } from "react-helmet-async";
 import ToolHero from "@/components/tools/ToolHero";
 import DownloaderInterface from "@/components/tools/DownloaderInterface";
-import { MusicVideo } from "lucide-react";
+import { Music } from "lucide-react";
 
 export default function TikTokVideoDownloader() {
   const formats = [
@@ -42,7 +42,7 @@ export default function TikTokVideoDownloader() {
       <ToolHero
         title="TikTok Video Downloader"
         description="Download TikTok videos without watermark. Free online tool, no login required."
-        icon={<MusicVideo size={24} />}
+        icon={<Music size={24} />}
       />
 
       <DownloaderInterface

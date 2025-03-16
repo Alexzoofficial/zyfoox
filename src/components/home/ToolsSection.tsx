@@ -1,5 +1,5 @@
 
-import { Brain, MessageSquare, Briefcase, MessagesSquare, Lightbulb, Play, MessageCircle, Video, Download, VideoVertical, Image, Instagram, CirclePlay, Facebook, MusicVideo, Twitter } from "lucide-react";
+import { Brain, MessageSquare, Briefcase, MessagesSquare, Lightbulb, Play, MessageCircle, Video, Download, MoveVertical, Image, Instagram, CirclePlay, Facebook, Music, Twitter } from "lucide-react";
 import ToolCard from "../ui/ToolCard";
 
 export default function ToolsSection() {
@@ -73,7 +73,7 @@ export default function ToolsSection() {
     {
       title: "YouTube Shorts Downloader",
       description: "Download YouTube Shorts videos without watermark in high quality for free.",
-      icon: <VideoVertical size={24} />,
+      icon: <MoveVertical size={24} />,
       path: "/tools/youtube-shorts-downloader",
       delay: 200
     },
@@ -115,7 +115,7 @@ export default function ToolsSection() {
     {
       title: "TikTok Video Downloader",
       description: "Download TikTok videos without watermark in high quality for free.",
-      icon: <MusicVideo size={24} />,
+      icon: <Music size={24} />,
       path: "/tools/tiktok-video-downloader",
       delay: 300
     },
