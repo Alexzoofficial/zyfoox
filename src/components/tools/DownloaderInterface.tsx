@@ -1,13 +1,22 @@
 
 import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Download, Link as LinkIcon, Copy } from "lucide-react";
+import { Loader2, Download, Link as LinkIcon, Copy, FileType, FileDown } from "lucide-react";
 import { validateUrl, processDownload, extractVideoId, downloadFile, getThumbnailUrl } from "@/utils/downloaderService";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+
+interface DownloadQuality {
+  label: string;
+  value: string;
+  size?: string;
+  url: string;
+}
 
 interface DownloaderInterfaceProps {
   toolName: string;
@@ -32,6 +41,8 @@ export default function DownloaderInterface({
   const [downloadUrl, setDownloadUrl] = useState<string>("");
   const [videoId, setVideoId] = useState<string | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
+  const [qualities, setQualities] = useState<DownloadQuality[]>([]);
+  const [selectedQuality, setSelectedQuality] = useState<string>("");
   const { toast } = useToast();
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +50,7 @@ export default function DownloaderInterface({
     setUrl(newUrl);
     
     // Extract video ID and set thumbnail for applicable platforms
-    if (platform === "youtube") {
+    if (platform === "youtube" || platform === "tiktok") {
       const extractedId = extractVideoId(newUrl, platform);
       setVideoId(extractedId);
       if (extractedId) {
@@ -52,6 +63,18 @@ export default function DownloaderInterface({
 
   const handleFormatChange = (value: string) => {
     setFormat(value);
+    // Reset selected quality when format changes
+    setSelectedQuality("");
+    setQualities([]);
+  };
+
+  const handleQualityChange = (value: string) => {
+    setSelectedQuality(value);
+    // Find the selected quality from the available qualities
+    const selected = qualities.find(q => q.value === value);
+    if (selected) {
+      setDownloadUrl(selected.url);
+    }
   };
 
   const handleProcess = useCallback(async () => {
@@ -74,12 +97,22 @@ export default function DownloaderInterface({
     }
 
     setIsProcessing(true);
+    setQualities([]);
+    setSelectedQuality("");
     
     try {
       const result = await processDownload(url, platform, format);
       
       if (result.success) {
-        setDownloadUrl(result.downloadUrl || "");
+        // Set download qualities if available
+        if (result.qualities && result.qualities.length > 0) {
+          setQualities(result.qualities);
+          setSelectedQuality(result.qualities[0].value);
+          setDownloadUrl(result.qualities[0].url);
+        } else {
+          setDownloadUrl(result.downloadUrl || "");
+        }
+        
         toast({
           title: "Success!",
           description: result.message,
@@ -105,9 +138,14 @@ export default function DownloaderInterface({
 
   const handleDownload = useCallback(() => {
     if (downloadUrl) {
-      downloadFile(downloadUrl, `${platform}-download`);
+      // Generate a more realistic filename based on platform, format, and quality
+      const fileFormat = format.includes("mp3") ? "mp3" : "mp4";
+      const qualityLabel = selectedQuality ? `-${selectedQuality}` : "";
+      const filename = `${platform}-download${qualityLabel}.${fileFormat}`;
+      
+      downloadFile(downloadUrl, filename);
     }
-  }, [downloadUrl, platform]);
+  }, [downloadUrl, platform, format, selectedQuality]);
 
   const copyToClipboard = useCallback((textToCopy: string) => {
     navigator.clipboard.writeText(textToCopy);
@@ -204,7 +242,7 @@ export default function DownloaderInterface({
           </div>
         </div>
         
-        {(downloadUrl || thumbnailUrl) && (
+        {(downloadUrl || thumbnailUrl || qualities.length > 0) && (
           <div className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-4">Download</h2>
             
@@ -222,6 +260,29 @@ export default function DownloaderInterface({
               </div>
             )}
             
+            {qualities.length > 0 && (
+              <div className="mb-4">
+                <h3 className="font-medium mb-2">Select Quality:</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                  {qualities.map((quality) => (
+                    <Card 
+                      key={quality.value}
+                      className={`cursor-pointer hover:bg-accent transition-colors ${selectedQuality === quality.value ? 'border-primary bg-accent/50' : ''}`}
+                      onClick={() => handleQualityChange(quality.value)}
+                    >
+                      <CardContent className="p-3 flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">{quality.label}</p>
+                          {quality.size && <p className="text-xs text-muted-foreground">{quality.size}</p>}
+                        </div>
+                        <FileType size={18} className="text-muted-foreground" />
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+            
             {downloadUrl && (
               <>
                 <Separator className="my-4" />
@@ -229,11 +290,19 @@ export default function DownloaderInterface({
                 <div className="mt-4">
                   <Button
                     onClick={handleDownload}
-                    className="w-full"
+                    className="w-full group relative overflow-hidden"
                     variant="default"
                   >
-                    <Download size={18} className="mr-2" />
-                    Download Now
+                    <span className="absolute inset-0 w-0 bg-white/20 transition-all duration-300 ease-out group-hover:w-full"></span>
+                    <span className="relative flex items-center justify-center">
+                      <FileDown size={18} className="mr-2" />
+                      Download Now
+                      {selectedQuality && qualities.find(q => q.value === selectedQuality)?.size && (
+                        <Badge variant="outline" className="ml-2 bg-primary/20">
+                          {qualities.find(q => q.value === selectedQuality)?.size}
+                        </Badge>
+                      )}
+                    </span>
                   </Button>
                   
                   <p className="text-xs text-muted-foreground mt-4 text-center">
