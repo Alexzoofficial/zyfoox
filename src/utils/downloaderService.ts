@@ -297,10 +297,7 @@ export const downloadFile = (url: string, filename: string): void => {
   console.log(`Downloading file: ${filename} from URL: ${url}`);
   
   // In a real implementation, this would trigger an actual file download
-  // Since we can't actually download in this demo, we'll just simulate it with console logs
-  console.log(`Download started for: ${filename}`);
-  
-  // This code would work in a real application with actual file URLs
+  // For demonstration, create a download link and click it
   const link = document.createElement('a');
   link.href = url;
   link.download = filename;
