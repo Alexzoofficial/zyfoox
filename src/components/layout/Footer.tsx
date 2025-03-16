@@ -27,7 +27,7 @@ export default function Footer() {
               <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Github">
                 <Github size={20} />
               </a>
-              <a href="mailto:contact@zyfoox.com" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Email">
+              <a href="mailto:sarthakpandey7830@gmail.com" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Email">
                 <Mail size={20} />
               </a>
             </div>

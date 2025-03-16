@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -10,10 +9,10 @@ export default function TermsOfService() {
   return (
     <>
       <Helmet>
-        <title>Terms of Service | AIToolbox - User Agreement</title>
-        <meta name="description" content="Read AIToolbox's Terms of Service. This agreement outlines the rules, guidelines, and terms for using our AI-powered tools and services." />
+        <title>Terms of Service | Zyfoox - User Agreement</title>
+        <meta name="description" content="Read Zyfoox's Terms of Service. This agreement outlines the rules, guidelines, and terms for using our AI-powered tools and services." />
         <meta name="keywords" content="terms of service, user agreement, legal terms, AI tools terms, service agreement, user guidelines" />
-        <link rel="canonical" href="https://aitoolbox.com/terms" />
+        <link rel="canonical" href="https://zyfoox.com/terms" />
       </Helmet>
 
       <div className="container mx-auto px-4 py-16 max-w-4xl">
@@ -30,7 +29,7 @@ export default function TermsOfService() {
         <div className="glass-card rounded-xl p-8 mb-12 prose prose-lg dark:prose-invert max-w-none">
           <h2 className="text-2xl font-semibold mb-4">1. Introduction and Acceptance of Terms</h2>
           <p>
-            Welcome to AIToolbox. These Terms of Service ("Terms") govern your access to and use of AIToolbox's website, applications, and services (collectively, the "Services"). By accessing or using our Services, you agree to be bound by these Terms and our Privacy Policy.
+            Welcome to Zyfoox. These Terms of Service ("Terms") govern your access to and use of Zyfoox's website, applications, and services (collectively, the "Services"). By accessing or using our Services, you agree to be bound by these Terms and our Privacy Policy.
           </p>
           <p>
             Please read these Terms carefully before using our Services. If you do not agree to these Terms, you may not access or use the Services. By accessing or using any part of our Services, you indicate that you understand, agree to, and accept all the terms and conditions contained in this agreement.
@@ -45,7 +44,7 @@ export default function TermsOfService() {
           </div>
           
           <p>
-            AIToolbox provides AI-powered tools designed to enhance creativity, productivity, and digital presence for individuals and businesses. Our platform offers a suite of tools for personal branding, content creation, business development, and educational resources.
+            Zyfoox provides AI-powered tools designed to enhance creativity, productivity, and digital presence for individuals and businesses. Our platform offers a suite of tools for personal branding, content creation, business development, and educational resources.
           </p>
           <p>
             We reserve the right to modify these Terms at any time. If we make changes, we will provide notice by updating the date at the top of these Terms and, in some cases, providing additional notification. Your continued use of the Services after any changes indicates your acceptance of the modified Terms.
@@ -58,7 +57,7 @@ export default function TermsOfService() {
             To access certain features of our Services, you may be required to register for an account. When you register, you agree to provide accurate, current, and complete information about yourself. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.
           </p>
           <p>
-            You must immediately notify AIToolbox of any unauthorized use of your account or any other breach of security. AIToolbox will not be liable for any losses or damages arising from your failure to maintain the security of your account credentials.
+            You must immediately notify Zyfoox of any unauthorized use of your account or any other breach of security. Zyfoox will not be liable for any losses or damages arising from your failure to maintain the security of your account credentials.
           </p>
 
           <h3 className="text-xl font-medium mt-6 mb-3">2.2 Eligibility Requirements</h3>
@@ -96,22 +95,20 @@ export default function TermsOfService() {
             <li>Interfere with, disrupt, or create an undue burden on the Services or the networks or services connected to the Services</li>
             <li>Attempt to bypass any measures of the Services designed to prevent or restrict access</li>
             <li>Decompile, reverse engineer, or otherwise attempt to obtain the source code or underlying ideas or information of or relating to the Services</li>
-            <li>Reproduce, duplicate, copy, sell, resell, or exploit any portion of the Services without express written permission from AIToolbox</li>
+            <li>Reproduce, duplicate, copy, sell, resell, or exploit any portion of the Services without express written permission from Zyfoox</li>
             <li>Collect or harvest user information or content for any purpose other than use of the Services as specifically authorized</li>
           </ul>
 
-          {/* Additional sections would continue here for a full 12000+ word terms of service */}
           <h2 className="text-2xl font-semibold mb-4 mt-8">4. Intellectual Property Rights</h2>
           
-          <h3 className="text-xl font-medium mt-6 mb-3">4.1 AIToolbox's Intellectual Property</h3>
+          <h3 className="text-xl font-medium mt-6 mb-3">4.1 Zyfoox's Intellectual Property</h3>
           <p>
-            The Services and all content, features, and functionality (including but not limited to all information, software, text, displays, images, video, audio, and the design, selection, and arrangement thereof) are owned by AIToolbox, its licensors, or other providers and are protected by copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.
+            The Services and all content, features, and functionality (including but not limited to all information, software, text, displays, images, video, audio, and the design, selection, and arrangement thereof) are owned by Zyfoox, its licensors, or other providers and are protected by copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.
           </p>
           <p>
             These Terms do not grant you any right, title, or interest in the Services, content, or our trademarks, logos, or other brand features. You agree not to modify, reproduce, distribute, create derivative works or adaptations of, publicly display or in any way exploit any of the Services or content in whole or in part except as expressly authorized by us.
           </p>
 
-          {/* More sections would be added for a complete terms of service */}
           <Separator className="my-8" />
 
           <p className="text-center text-muted-foreground">

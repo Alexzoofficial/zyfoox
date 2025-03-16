@@ -90,16 +90,16 @@ export default function BlogPost() {
   return (
     <>
       <Helmet>
-        <title>{post.title} | AIToolbox Blog</title>
+        <title>{post.title} | Zyfoox Blog</title>
         <meta name="description" content={post.excerpt} />
         <meta name="keywords" content={post.tags.join(', ') + ', AI tools, ' + formatToolName(post.tool)} />
-        <link rel="canonical" href={`https://aitoolbox.com/blog/${post.id}`} />
+        <link rel="canonical" href={`https://zyfoox.com/blog/${post.id}`} />
         
         {/* Open Graph tags */}
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.excerpt} />
         <meta property="og:image" content={post.imageUrl} />
-        <meta property="og:url" content={`https://aitoolbox.com/blog/${post.id}`} />
+        <meta property="og:url" content={`https://zyfoox.com/blog/${post.id}`} />
         <meta property="og:type" content="article" />
         
         {/* Twitter Card tags */}

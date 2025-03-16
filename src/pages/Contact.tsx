@@ -50,6 +50,16 @@ export default function Contact() {
     // In a real application, this would send the form data to a server
     console.log(values);
     
+    // Send email using a mailto link
+    const mailtoLink = `mailto:sarthakpandey7830@gmail.com?subject=${encodeURIComponent(
+      `Contact Form: ${values.subject}`
+    )}&body=${encodeURIComponent(
+      `Name: ${values.name}\nEmail: ${values.email}\n\nMessage:\n${values.message}`
+    )}`;
+    
+    // Open the default mail client
+    window.open(mailtoLink, "_blank");
+    
     // Show success message
     toast.success("Your message has been sent! We'll get back to you soon.", {
       duration: 5000,
@@ -62,10 +72,10 @@ export default function Contact() {
   return (
     <>
       <Helmet>
-        <title>Contact Us | AIToolbox - Get in Touch</title>
-        <meta name="description" content="Have questions about our AI tools? Need assistance? Contact the AIToolbox team for support, partnership inquiries, or feedback. We're here to help!" />
-        <meta name="keywords" content="contact AIToolbox, AI tools support, feedback, help desk, customer service, AI assistance" />
-        <link rel="canonical" href="https://aitoolbox.com/contact" />
+        <title>Contact Us | Zyfoox - Get in Touch</title>
+        <meta name="description" content="Have questions about our AI tools? Need assistance? Contact the Zyfoox team for support, partnership inquiries, or feedback. We're here to help!" />
+        <meta name="keywords" content="contact Zyfoox, AI tools support, feedback, help desk, customer service, AI assistance" />
+        <link rel="canonical" href="https://zyfoox.com/contact" />
       </Helmet>
 
       <div className="container mx-auto px-4 py-16 max-w-6xl">
@@ -200,10 +210,10 @@ export default function Contact() {
                   <div>
                     <h3 className="font-medium mb-1">Email</h3>
                     <p className="text-muted-foreground">
-                      support@aitoolbox.com
+                      support@zyfoox.com
                     </p>
                     <p className="text-muted-foreground mt-1">
-                      partnerships@aitoolbox.com
+                      partnerships@zyfoox.com
                     </p>
                   </div>
                 </div>
