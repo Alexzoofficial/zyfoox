@@ -143,9 +143,15 @@ export default function DownloaderInterface({
       const qualityLabel = selectedQuality ? `-${selectedQuality}` : "";
       const filename = `${platform}-download${qualityLabel}.${fileFormat}`;
       
+      // Directly initiate download without showing an alert
       downloadFile(downloadUrl, filename);
+      
+      toast({
+        title: "Download Started",
+        description: `Your file ${filename} is being downloaded`,
+      });
     }
-  }, [downloadUrl, platform, format, selectedQuality]);
+  }, [downloadUrl, platform, format, selectedQuality, toast]);
 
   const copyToClipboard = useCallback((textToCopy: string) => {
     navigator.clipboard.writeText(textToCopy);

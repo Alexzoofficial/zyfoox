@@ -294,19 +294,19 @@ export const extractVideoId = (url: string, platform: string): string | null => 
 
 // Function to download a file given a URL
 export const downloadFile = (url: string, filename: string): void => {
-  // Create a mock download experience since we can't actually download files
   console.log(`Downloading file: ${filename} from URL: ${url}`);
   
-  // Show a notification to the user about the mock download
-  alert(`This is a demo version. In a real application, ${filename} would be downloaded.`);
+  // In a real implementation, this would trigger an actual file download
+  // Since we can't actually download in this demo, we'll just simulate it with console logs
+  console.log(`Download started for: ${filename}`);
   
   // This code would work in a real application with actual file URLs
-  // const link = document.createElement('a');
-  // link.href = url;
-  // link.download = filename;
-  // document.body.appendChild(link);
-  // link.click();
-  // document.body.removeChild(link);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
 
 // Function to simulate getting thumbnail URL
@@ -330,4 +330,3 @@ export const getThumbnailUrl = (videoId: string, platform: string): string => {
       return '';
   }
 };
-
