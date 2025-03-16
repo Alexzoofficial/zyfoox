@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -29,6 +30,17 @@ const HookGenerator = lazy(() => import("./pages/tools/HookGenerator"));
 const WhatsAppMarketing = lazy(() => import("./pages/tools/WhatsAppMarketing"));
 const YouTubeBranding = lazy(() => import("./pages/tools/YouTubeBranding"));
 
+// New Downloader Tool Pages - Lazy loaded
+const YouTubeVideoDownloader = lazy(() => import("./pages/tools/YouTubeVideoDownloader"));
+const YouTubeShortsDownloader = lazy(() => import("./pages/tools/YouTubeShortsDownloader"));
+const YouTubeThumbnailDownloader = lazy(() => import("./pages/tools/YouTubeThumbnailDownloader"));
+const InstagramReelsDownloader = lazy(() => import("./pages/tools/InstagramReelsDownloader"));
+const InstagramStoryDownloader = lazy(() => import("./pages/tools/InstagramStoryDownloader"));
+const FacebookVideoDownloader = lazy(() => import("./pages/tools/FacebookVideoDownloader"));
+const FacebookReelsDownloader = lazy(() => import("./pages/tools/FacebookReelsDownloader"));
+const TikTokVideoDownloader = lazy(() => import("./pages/tools/TikTokVideoDownloader"));
+const TwitterVideoDownloader = lazy(() => import("./pages/tools/TwitterVideoDownloader"));
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -47,7 +59,7 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<BlogPost />} />
               
-              {/* Tool Routes */}
+              {/* Original Tool Routes */}
               <Route path="/tools" element={<Navigate to="/tools/personal-branding" />} />
               <Route 
                 path="/tools/personal-branding" 
@@ -110,6 +122,80 @@ const App = () => (
                 element={
                   <Suspense fallback={<div>Loading...</div>}>
                     <YouTubeBranding />
+                  </Suspense>
+                } 
+              />
+              
+              {/* New Downloader Tool Routes */}
+              <Route 
+                path="/tools/youtube-video-downloader" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <YouTubeVideoDownloader />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/youtube-shorts-downloader" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <YouTubeShortsDownloader />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/youtube-thumbnail-downloader" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <YouTubeThumbnailDownloader />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/instagram-reels-downloader" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <InstagramReelsDownloader />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/instagram-story-downloader" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <InstagramStoryDownloader />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/facebook-video-downloader" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <FacebookVideoDownloader />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/facebook-reels-downloader" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <FacebookReelsDownloader />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/tiktok-video-downloader" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <TikTokVideoDownloader />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/twitter-video-downloader" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <TwitterVideoDownloader />
                   </Suspense>
                 } 
               />

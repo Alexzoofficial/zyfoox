@@ -14,7 +14,7 @@ export default function Footer() {
               Zyfoox
             </Link>
             <p className="text-muted-foreground mt-2 mb-4">
-              AI-powered tools to supercharge your digital presence, content creation, and business. 
+              AI-powered tools and downloaders to supercharge your digital presence, content creation, and social media experience. 
               All our tools are completely free to use with no limitations.
             </p>
             <div className="flex space-x-4">
@@ -34,7 +34,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-medium text-foreground mb-4">Tools</h3>
+            <h3 className="font-medium text-foreground mb-4">AI Tools</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/tools/personal-branding" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -52,17 +52,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/tools/meme-marketing" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Meme Marketing
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-medium text-foreground mb-4">More Tools</h3>
-            <ul className="space-y-2">
-              <li>
                 <Link to="/tools/business-ideas" className="text-muted-foreground hover:text-foreground transition-colors">
                   Business Ideas
                 </Link>
@@ -72,14 +61,35 @@ export default function Footer() {
                   Hook Generator
                 </Link>
               </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-medium text-foreground mb-4">Downloader Tools</h3>
+            <ul className="space-y-2">
               <li>
-                <Link to="/tools/whatsapp-marketing" className="text-muted-foreground hover:text-foreground transition-colors">
-                  WhatsApp Marketing
+                <Link to="/tools/youtube-video-downloader" className="text-muted-foreground hover:text-foreground transition-colors">
+                  YouTube Video Downloader
                 </Link>
               </li>
               <li>
-                <Link to="/tools/youtube-branding" className="text-muted-foreground hover:text-foreground transition-colors">
-                  YouTube Branding
+                <Link to="/tools/youtube-shorts-downloader" className="text-muted-foreground hover:text-foreground transition-colors">
+                  YouTube Shorts Downloader
+                </Link>
+              </li>
+              <li>
+                <Link to="/tools/instagram-reels-downloader" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Instagram Reels Downloader
+                </Link>
+              </li>
+              <li>
+                <Link to="/tools/facebook-video-downloader" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Facebook Video Downloader
+                </Link>
+              </li>
+              <li>
+                <Link to="/tools/tiktok-video-downloader" className="text-muted-foreground hover:text-foreground transition-colors">
+                  TikTok Video Downloader
                 </Link>
               </li>
             </ul>
