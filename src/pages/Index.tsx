@@ -2,6 +2,7 @@
 import Hero from "@/components/home/Hero";
 import ToolsSection from "@/components/home/ToolsSection";
 import FeaturesSection from "@/components/home/FeaturesSection";
+import PricingSection from "@/components/home/PricingSection";
 
 export default function Index() {
   return (
@@ -9,6 +10,7 @@ export default function Index() {
       <Hero />
       <ToolsSection />
       <FeaturesSection />
+      <PricingSection />
       
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
