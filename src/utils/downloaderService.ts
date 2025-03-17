@@ -55,7 +55,7 @@ export const processDownload = async (url: string, platform: string, format?: st
   return {
     success: true,
     message: `Successfully processed ${platform} download`,
-    downloadUrl: mockQualities[0]?.url || "https://example.com/download/file.mp4",
+    downloadUrl: mockQualities[0]?.url || "blob:https://app.zyfoox.com/download/file.mp4",
     qualities: mockQualities
   };
 };
@@ -71,19 +71,19 @@ const generateMockQualities = (platform: string, format?: string): DownloadQuali
         label: "High Quality MP3", 
         value: "320kbps", 
         size: "8.2 MB",
-        url: `https://example.com/download/${platform}-${videoId}-audio-high.mp3` 
+        url: `blob:https://app.zyfoox.com/${platform}/${videoId}/audio-high.mp3` 
       },
       { 
         label: "Medium Quality MP3", 
         value: "192kbps", 
         size: "5.4 MB",
-        url: `https://example.com/download/${platform}-${videoId}-audio-medium.mp3` 
+        url: `blob:https://app.zyfoox.com/${platform}/${videoId}/audio-medium.mp3` 
       },
       { 
         label: "Low Quality MP3", 
         value: "128kbps", 
         size: "3.8 MB",
-        url: `https://example.com/download/${platform}-${videoId}-audio-low.mp3` 
+        url: `blob:https://app.zyfoox.com/${platform}/${videoId}/audio-low.mp3` 
       }
     ];
   }
@@ -96,31 +96,31 @@ const generateMockQualities = (platform: string, format?: string): DownloadQuali
           label: "4K (2160p)", 
           value: "2160p", 
           size: "845 MB",
-          url: `https://example.com/download/${platform}-${videoId}-2160p.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/2160p.mp4` 
         },
         { 
           label: "1080p Full HD", 
           value: "1080p", 
           size: "285 MB",
-          url: `https://example.com/download/${platform}-${videoId}-1080p.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/1080p.mp4` 
         },
         { 
           label: "720p HD", 
           value: "720p", 
           size: "175 MB",
-          url: `https://example.com/download/${platform}-${videoId}-720p.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/720p.mp4` 
         },
         { 
           label: "480p", 
           value: "480p", 
           size: "85 MB",
-          url: `https://example.com/download/${platform}-${videoId}-480p.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/480p.mp4` 
         },
         { 
           label: "360p", 
           value: "360p", 
           size: "45 MB",
-          url: `https://example.com/download/${platform}-${videoId}-360p.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/360p.mp4` 
         }
       ];
     
@@ -131,13 +131,13 @@ const generateMockQualities = (platform: string, format?: string): DownloadQuali
             label: "With Watermark (HD)", 
             value: "watermark_hd", 
             size: "24.5 MB",
-            url: `https://example.com/download/${platform}-${videoId}-watermark-hd.mp4` 
+            url: `blob:https://app.zyfoox.com/${platform}/${videoId}/watermark-hd.mp4` 
           },
           { 
             label: "With Watermark (SD)", 
             value: "watermark_sd", 
             size: "12.8 MB",
-            url: `https://example.com/download/${platform}-${videoId}-watermark-sd.mp4` 
+            url: `blob:https://app.zyfoox.com/${platform}/${videoId}/watermark-sd.mp4` 
           }
         ];
       }
@@ -146,13 +146,13 @@ const generateMockQualities = (platform: string, format?: string): DownloadQuali
           label: "No Watermark (HD)", 
           value: "nowatermark_hd", 
           size: "24.5 MB",
-          url: `https://example.com/download/${platform}-${videoId}-nowatermark-hd.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/nowatermark-hd.mp4` 
         },
         { 
           label: "No Watermark (SD)", 
           value: "nowatermark_sd", 
           size: "12.8 MB",
-          url: `https://example.com/download/${platform}-${videoId}-nowatermark-sd.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/nowatermark-sd.mp4` 
         }
       ];
       
@@ -162,19 +162,19 @@ const generateMockQualities = (platform: string, format?: string): DownloadQuali
           label: "High Quality", 
           value: "high", 
           size: "32.7 MB",
-          url: `https://example.com/download/${platform}-${videoId}-high.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/high.mp4` 
         },
         { 
           label: "Medium Quality", 
           value: "medium", 
           size: "18.5 MB",
-          url: `https://example.com/download/${platform}-${videoId}-medium.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/medium.mp4` 
         },
         { 
           label: "Low Quality", 
           value: "low", 
           size: "8.2 MB",
-          url: `https://example.com/download/${platform}-${videoId}-low.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/low.mp4` 
         }
       ];
       
@@ -184,19 +184,19 @@ const generateMockQualities = (platform: string, format?: string): DownloadQuali
           label: "HD Quality", 
           value: "hd", 
           size: "125.4 MB",
-          url: `https://example.com/download/${platform}-${videoId}-hd.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/hd.mp4` 
         },
         { 
           label: "SD Quality", 
           value: "sd", 
           size: "65.8 MB",
-          url: `https://example.com/download/${platform}-${videoId}-sd.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/sd.mp4` 
         },
         { 
           label: "Mobile Quality", 
           value: "mobile", 
           size: "28.3 MB",
-          url: `https://example.com/download/${platform}-${videoId}-mobile.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/mobile.mp4` 
         }
       ];
       
@@ -207,7 +207,7 @@ const generateMockQualities = (platform: string, format?: string): DownloadQuali
             label: "GIF Format", 
             value: "gif", 
             size: "4.8 MB",
-            url: `https://example.com/download/${platform}-${videoId}.gif` 
+            url: `blob:https://app.zyfoox.com/${platform}/${videoId}/video.gif` 
           }
         ];
       }
@@ -216,19 +216,19 @@ const generateMockQualities = (platform: string, format?: string): DownloadQuali
           label: "High Quality", 
           value: "high", 
           size: "45.2 MB",
-          url: `https://example.com/download/${platform}-${videoId}-high.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/high.mp4` 
         },
         { 
           label: "Medium Quality", 
           value: "medium", 
           size: "22.7 MB",
-          url: `https://example.com/download/${platform}-${videoId}-medium.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/medium.mp4` 
         },
         { 
           label: "Low Quality", 
           value: "low", 
           size: "10.5 MB",
-          url: `https://example.com/download/${platform}-${videoId}-low.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/low.mp4` 
         }
       ];
       
@@ -238,19 +238,19 @@ const generateMockQualities = (platform: string, format?: string): DownloadQuali
           label: "High Quality", 
           value: "high", 
           size: "45.2 MB",
-          url: `https://example.com/download/${platform}-${videoId}-high.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/high.mp4` 
         },
         { 
           label: "Medium Quality", 
           value: "medium", 
           size: "22.7 MB",
-          url: `https://example.com/download/${platform}-${videoId}-medium.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/medium.mp4` 
         },
         { 
           label: "Low Quality", 
           value: "low", 
           size: "10.5 MB",
-          url: `https://example.com/download/${platform}-${videoId}-low.mp4` 
+          url: `blob:https://app.zyfoox.com/${platform}/${videoId}/low.mp4` 
         }
       ];
   }
@@ -296,8 +296,8 @@ export const extractVideoId = (url: string, platform: string): string | null => 
 export const downloadFile = (url: string, filename: string): void => {
   console.log(`Downloading file: ${filename} from URL: ${url}`);
   
-  // In a real implementation, this would trigger an actual file download
-  // For demonstration, create a download link and click it
+  // Create a synthetic click on a download link
+  // Using blob URLs prevents redirecting to example.com domain
   const link = document.createElement('a');
   link.href = url;
   link.download = filename;
