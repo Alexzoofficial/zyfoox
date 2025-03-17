@@ -28,6 +28,15 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const scrollToPricing = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const pricingSection = document.getElementById('pricing-section');
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ behavior: 'smooth' });
+      setMobileMenuOpen(false);
+    }
+  };
+
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -67,9 +76,13 @@ export default function Header() {
           <Link to="/blog" className="px-4 py-2 rounded-lg text-foreground hover:bg-secondary transition-colors">
             Blog
           </Link>
-          <Link to="/pricing" className="px-4 py-2 rounded-lg text-foreground hover:bg-secondary transition-colors">
+          <a 
+            href="#pricing-section" 
+            onClick={scrollToPricing}
+            className="px-4 py-2 rounded-lg text-foreground hover:bg-secondary transition-colors"
+          >
             Pricing
-          </Link>
+          </a>
           <div className="ml-2">
             <ThemeToggle />
           </div>
@@ -113,13 +126,13 @@ export default function Header() {
             >
               Blog
             </Link>
-            <Link 
-              to="/pricing" 
-              className="block px-3 py-2 rounded-lg hover:bg-secondary transition-colors" 
-              onClick={() => setMobileMenuOpen(false)}
+            <a 
+              href="#pricing-section" 
+              onClick={scrollToPricing}
+              className="block px-3 py-2 rounded-lg hover:bg-secondary transition-colors"
             >
               Pricing
-            </Link>
+            </a>
           </div>
         </div>
       )}

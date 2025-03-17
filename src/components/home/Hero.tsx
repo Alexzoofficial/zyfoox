@@ -3,6 +3,14 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Hero() {
+  const scrollToPricing = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const pricingSection = document.getElementById('pricing-section');
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="relative overflow-hidden pt-16 pb-20 md:pt-24 md:pb-28 px-4">
       <div className="absolute inset-0 bg-gradient-radial from-primary/5 to-transparent"></div>
@@ -29,12 +37,13 @@ export default function Hero() {
               Try Our Tools
               <ArrowRight size={18} className="ml-2" />
             </Link>
-            <Link
-              to="/pricing"
+            <a
+              href="#pricing-section"
+              onClick={scrollToPricing}
               className="px-6 py-3 rounded-xl bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors font-medium"
             >
               View Pricing
-            </Link>
+            </a>
           </div>
         </div>
         
