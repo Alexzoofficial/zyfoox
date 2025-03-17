@@ -35,7 +35,7 @@ export default function Footer() {
 
           <div>
             <h3 className="font-medium text-foreground mb-4">AI Tools</h3>
-            <ul className="space-y-2">
+            <ul className="grid grid-cols-1 gap-y-2">
               <li>
                 <Link to="/tools/personal-branding" className="text-muted-foreground hover:text-foreground transition-colors">
                   Personal Branding
@@ -66,7 +66,7 @@ export default function Footer() {
 
           <div>
             <h3 className="font-medium text-foreground mb-4">Downloader Tools</h3>
-            <ul className="space-y-2">
+            <ul className="grid grid-cols-1 gap-y-2">
               <li>
                 <Link to="/tools/youtube-video-downloader" className="text-muted-foreground hover:text-foreground transition-colors">
                   YouTube Video Downloader
@@ -97,20 +97,25 @@ export default function Footer() {
 
           <div>
             <h3 className="font-medium text-foreground mb-4">Company</h3>
-            <ul className="space-y-2">
+            <ul className="grid grid-cols-1 gap-y-2">
               <li>
                 <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Blog
+                <Link to="/disclaimer" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Disclaimer
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Free Access
+                <Link to="/dmca" className="text-muted-foreground hover:text-foreground transition-colors">
+                  DMCA
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Blog
                 </Link>
               </li>
               <li>

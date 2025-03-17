@@ -1,200 +1,225 @@
 
+import React from "react";
+import { Helmet } from "react-helmet-async";
 import { Building, LightbulbIcon, HeartHandshake, Rocket, Users, Award, Sparkles } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export default function About() {
   return (
-    <div className="container mx-auto px-4 py-16 max-w-6xl">
-      <section className="mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">About AIToolbox</h1>
-        <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-8 rounded-xl mb-12">
-          <p className="text-xl text-center text-muted-foreground leading-relaxed">
-            Empowering creators, entrepreneurs, and professionals with AI-powered tools
-            designed to transform ideas into impact.
-          </p>
-        </div>
-        
-        <div className="glass-card rounded-xl p-8 mb-12">
-          <h2 className="text-3xl font-bold mb-6">Our Story</h2>
-          <div className="text-muted-foreground space-y-4">
-            <p>
-              AIToolbox began with a simple yet powerful idea: What if we could make advanced AI capabilities accessible to everyone? 
-              In 2022, as artificial intelligence was rapidly transforming from a specialized field into a transformative technology, 
-              our founding team of AI researchers, software engineers, and product designers came together with a shared vision.
-            </p>
-            <p>
-              We had witnessed firsthand how AI tools were revolutionizing workflows for those with technical expertise or 
-              enterprise-level resources. But we also saw a significant gap - entrepreneurs, content creators, educators, and small 
-              business owners were often left behind, unable to harness these powerful capabilities without significant technical knowledge 
-              or prohibitive costs.
-            </p>
-            <p>
-              Founded by former researchers from leading AI labs and technologists from global technology companies, we set out to 
-              democratize access to AI capabilities that could multiply human creativity and productivity. Our first prototype was a 
-              simple web application that could generate professional marketing copy in seconds - a task that typically required hours 
-              of focused work or expensive agency resources.
-            </p>
-            <p>
-              The response was overwhelming. Users from diverse backgrounds - from solo entrepreneurs launching their first business 
-              to marketing teams at established companies - found immediate value in our solution. This early success fueled our 
-              expansion into a comprehensive suite of AI-powered tools spanning content creation, business development, educational 
-              resources, and professional development.
-            </p>
-            <p>
-              Today, AIToolbox serves over 500,000 users across 160 countries, ranging from individual professionals to Fortune 500 
-              companies. Our platform processes millions of AI-generated outputs daily, saving our users countless hours and unlocking 
-              creative possibilities previously unimaginable.
-            </p>
-            <p>
-              What began as a mission to make AI accessible has evolved into something much more profound: we're not just providing tools; 
-              we're empowering people to achieve their goals, bring their ideas to life, and focus on what truly matters - creating value 
-              and making an impact in their respective fields.
+    <>
+      <Helmet>
+        <title>About Zyfoox | AI-Powered Tools & Content Downloaders</title>
+        <meta name="description" content="Discover Zyfoox's journey, mission, and vision. We're dedicated to providing free AI tools and content downloaders that make digital creation and social media management accessible to everyone." />
+        <meta name="keywords" content="Zyfoox, AI tools, content downloaders, digital tools, social media tools, free AI platform" />
+        <link rel="canonical" href="https://zyfoox.com/about" />
+      </Helmet>
+
+      <div className="container mx-auto px-4 py-16 max-w-6xl">
+        <section className="mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">About Zyfoox</h1>
+          <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-8 rounded-xl mb-12">
+            <p className="text-xl text-center text-muted-foreground leading-relaxed">
+              Empowering creators, entrepreneurs, and professionals with AI-powered tools
+              designed to transform ideas into impact — 100% free and accessible to everyone.
             </p>
           </div>
-        </div>
-        
-        <div className="glass-card rounded-xl p-8 mb-12">
-          <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
-          <div className="text-muted-foreground space-y-4">
-            <p>
-              At AIToolbox, our mission is to democratize access to artificial intelligence, putting powerful AI tools into the hands 
-              of creators, entrepreneurs, educators, and professionals worldwide. We believe that AI should be an amplifier of human 
-              creativity and productivity, not a replacement for it.
-            </p>
-            <p>
-              We are committed to developing intuitive, ethical, and effective AI solutions that address real-world challenges across 
-              various domains. By removing technical barriers and prohibitive costs, we aim to level the playing field, allowing individuals 
-              and organizations of all sizes to harness the transformative potential of AI.
-            </p>
-            <p>
-              Our tools are designed not just to automate tasks but to enhance human capabilities, spark innovation, and create space 
-              for the kind of deep, creative work that drives progress and fulfillment. We envision a world where AI becomes a trusted 
-              companion in the creative and professional journey, handling the routine so humans can focus on the remarkable.
-            </p>
+          
+          <div className="glass-card rounded-xl p-8 mb-12">
+            <h2 className="text-3xl font-bold mb-6">Our Story</h2>
+            <div className="text-muted-foreground space-y-4">
+              <p>
+                Zyfoox was born from a simple yet powerful observation: advanced digital tools that enhance productivity and 
+                creativity were typically restricted to those with technical expertise or financial resources. This digital divide 
+                prevented countless talented individuals from unlocking their full potential in the increasingly competitive online landscape.
+              </p>
+              <p>
+                Founded in 2023 by a diverse team of AI researchers, software engineers, and digital creators, Zyfoox emerged as a 
+                response to this inequality. Our founding team had firsthand experience with the transformative power of AI and 
+                automation tools, but we were equally aware of how inaccessible these technologies remained for the average person.
+              </p>
+              <p>
+                Our journey began with a bold vision: to democratize access to cutting-edge AI tools and content downloaders that 
+                would normally require technical know-how or premium subscriptions. We committed to making these tools entirely free, 
+                with no hidden fees, paywalls, or functionality restrictions — a truly uncommon approach in today's digital ecosystem.
+              </p>
+              <p>
+                The initial months were challenging as we balanced developing user-friendly interfaces with ensuring our underlying 
+                AI algorithms delivered professional-quality results. We prioritized tools that addressed real-world needs: helping 
+                entrepreneurs develop business ideas, enabling content creators to repurpose material across platforms, supporting 
+                students with study assistance, and facilitating seamless content downloading from major social media platforms.
+              </p>
+              <p>
+                What began as a modest collection of tools quickly gained popularity as users discovered they could access enterprise-grade 
+                functionality without technical barriers or financial investment. Through word of mouth and community support, our user 
+                base expanded across more than 150 countries, encompassing students, small business owners, content creators, marketers, 
+                and professionals from diverse industries.
+              </p>
+              <p>
+                Today, Zyfoox processes millions of AI-generated outputs and content downloads monthly, helping users save countless 
+                hours of work while achieving results that previously would have required specialized skills or expensive software. 
+                Despite our growth, we remain committed to our founding principle: powerful digital tools should be accessible to everyone, 
+                regardless of technical background or financial capacity.
+              </p>
+            </div>
           </div>
-        </div>
-        
-        <div className="glass-card rounded-xl p-8 mb-12">
-          <h2 className="text-3xl font-bold mb-6">Our Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="p-6 border border-border/50 bg-background/50">
-              <div className="flex items-start gap-4">
-                <div className="bg-primary/10 p-2 rounded-lg">
-                  <Sparkles className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Human-Centered AI</h3>
-                  <p className="text-muted-foreground">
-                    We design our tools to augment human intelligence and creativity, not replace it. 
-                    Every feature we build starts with understanding human needs and challenges.
-                  </p>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-6 border border-border/50 bg-background/50">
-              <div className="flex items-start gap-4">
-                <div className="bg-primary/10 p-2 rounded-lg">
-                  <HeartHandshake className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Accessibility</h3>
-                  <p className="text-muted-foreground">
-                    We believe powerful AI tools should be available to everyone, regardless of technical 
-                    expertise or resource constraints. Simplicity and affordability drive our design decisions.
-                  </p>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-6 border border-border/50 bg-background/50">
-              <div className="flex items-start gap-4">
-                <div className="bg-primary/10 p-2 rounded-lg">
-                  <Award className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Excellence</h3>
-                  <p className="text-muted-foreground">
-                    We hold ourselves to the highest standards in AI development, user experience, and customer service. 
-                    Good enough is never enough – we continuously refine our offerings based on user feedback and technological advances.
-                  </p>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-6 border border-border/50 bg-background/50">
-              <div className="flex items-start gap-4">
-                <div className="bg-primary/10 p-2 rounded-lg">
-                  <LightbulbIcon className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Innovation</h3>
-                  <p className="text-muted-foreground">
-                    We embrace curiosity and experimentation, constantly exploring new ways AI can solve problems and create opportunities. 
-                    Our culture celebrates creative thinking and responsible risk-taking.
-                  </p>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-6 border border-border/50 bg-background/50">
-              <div className="flex items-start gap-4">
-                <div className="bg-primary/10 p-2 rounded-lg">
-                  <Users className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Diversity & Inclusion</h3>
-                  <p className="text-muted-foreground">
-                    We build for a global audience with diverse needs and perspectives. Our team reflects this commitment, 
-                    bringing together varied backgrounds, experiences, and viewpoints to inform our work.
-                  </p>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-6 border border-border/50 bg-background/50">
-              <div className="flex items-start gap-4">
-                <div className="bg-primary/10 p-2 rounded-lg">
-                  <Rocket className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Ethical AI</h3>
-                  <p className="text-muted-foreground">
-                    We commit to developing AI responsibly, with careful consideration of potential impacts. Transparency, 
-                    fairness, and privacy are non-negotiable aspects of our approach to AI development.
-                  </p>
-                </div>
-              </div>
-            </Card>
+          
+          <div className="glass-card rounded-xl p-8 mb-12">
+            <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
+            <div className="text-muted-foreground space-y-4">
+              <p>
+                At Zyfoox, our mission goes beyond providing free tools — we're building a more equitable digital ecosystem where 
+                creativity, entrepreneurship, and knowledge sharing can flourish without technical or financial barriers. We believe 
+                that artificial intelligence and automation should serve as amplifiers of human potential, not privileges reserved for a select few.
+              </p>
+              <p>
+                We're committed to developing and maintaining a comprehensive suite of AI-powered tools and content downloaders that remain 
+                100% free and accessible to anyone with an internet connection. By removing traditional obstacles to these technologies, 
+                we aim to level the playing field and enable users from all backgrounds to participate fully in the digital economy.
+              </p>
+              <p>
+                Our platform is designed to solve real-world challenges across multiple domains: helping entrepreneurs validate and develop 
+                business ideas, enabling content creators to optimize their workflows, supporting students and researchers with educational 
+                resources, and facilitating seamless content sharing across digital platforms. 
+              </p>
+              <p>
+                In an era where digital capability increasingly determines economic opportunity, we view our work as essential to 
+                promoting greater equity and inclusion. By democratizing access to advanced tools, we hope to unleash waves of creativity 
+                and innovation from previously underrepresented communities and individuals.
+              </p>
+              <p>
+                As we continue to grow, we remain guided by our foundational question: "How can we make powerful digital tools accessible 
+                to everyone?" This inquiry shapes our product development, user experience design, and overall strategy as we work toward 
+                a future where technological advancement benefits humanity at large, not just those with specialized knowledge or resources.
+              </p>
+            </div>
           </div>
-        </div>
-        
-        <div className="glass-card rounded-xl p-8">
-          <h2 className="text-3xl font-bold mb-6">Our Team</h2>
-          <div className="text-muted-foreground space-y-4">
-            <p>
-              The AIToolbox team brings together diverse expertise from AI research, software engineering, product design, and various 
-              industry domains. Our leadership team includes former researchers from leading AI labs, product managers from global 
-              technology companies, and entrepreneurs who have built and scaled successful technology ventures.
-            </p>
-            <p>
-              Beyond our technical capabilities, what truly defines our team is our shared commitment to the responsible development 
-              and application of AI. We believe in building technology that empowers rather than replaces human capabilities, that 
-              amplifies creativity rather than standardizing it, and that solves meaningful problems rather than creating new ones.
-            </p>
-            <p>
-              We operate as a distributed team across North America, Europe, and Asia, bringing global perspectives to our work while 
-              maintaining a unified culture centered on innovation, impact, and inclusivity. This distributed approach allows us to 
-              recruit exceptional talent regardless of geography and to better understand the diverse needs of our global user base.
-            </p>
-            <p>
-              As we continue to grow, we remain committed to building a team that not only possesses technical excellence but also 
-              embodies the values that drive our mission: empathy for users, passion for innovation, and dedication to using AI as a 
-              force for positive change in the world.
-            </p>
+          
+          <div className="glass-card rounded-xl p-8 mb-12">
+            <h2 className="text-3xl font-bold mb-6">Our Values</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="p-6 border border-border/50 bg-background/50">
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/10 p-2 rounded-lg">
+                    <Sparkles className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Accessibility First</h3>
+                    <p className="text-muted-foreground">
+                      We believe that powerful tools should be available to everyone. We design our platform to be intuitive for users 
+                      of all technical levels, and we're committed to keeping our services free of charge with no hidden limitations.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+              
+              <Card className="p-6 border border-border/50 bg-background/50">
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/10 p-2 rounded-lg">
+                    <HeartHandshake className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">User Empowerment</h3>
+                    <p className="text-muted-foreground">
+                      We develop tools that multiply human capabilities rather than replace them. Our AI solutions are designed to 
+                      enhance creativity, productivity, and knowledge-sharing while keeping users in full control of the final output.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+              
+              <Card className="p-6 border border-border/50 bg-background/50">
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/10 p-2 rounded-lg">
+                    <Award className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Quality Without Compromise</h3>
+                    <p className="text-muted-foreground">
+                      Free doesn't mean basic. We're committed to delivering professional-grade tools that produce high-quality results. 
+                      We continuously refine our algorithms and interfaces based on user feedback and technological advances.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+              
+              <Card className="p-6 border border-border/50 bg-background/50">
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/10 p-2 rounded-lg">
+                    <LightbulbIcon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Innovation With Purpose</h3>
+                    <p className="text-muted-foreground">
+                      We focus on developing tools that solve real-world problems rather than pursuing technology for its own sake. 
+                      Every feature we build addresses specific challenges faced by our diverse user community.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+              
+              <Card className="p-6 border border-border/50 bg-background/50">
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/10 p-2 rounded-lg">
+                    <Users className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Global Perspective</h3>
+                    <p className="text-muted-foreground">
+                      We build for a worldwide audience with diverse needs and contexts. Our team and user community span more than 
+                      150 countries, informing our inclusive approach to product development and user experience design.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+              
+              <Card className="p-6 border border-border/50 bg-background/50">
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/10 p-2 rounded-lg">
+                    <Rocket className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Ethical Technology</h3>
+                    <p className="text-muted-foreground">
+                      We develop and deploy AI responsibly, with careful consideration of potential impacts. We prioritize user privacy, 
+                      data security, and transparent practices in all aspects of our platform.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+          
+          <div className="glass-card rounded-xl p-8">
+            <h2 className="text-3xl font-bold mb-6">Join Us On This Journey</h2>
+            <div className="text-muted-foreground space-y-4">
+              <p>
+                Zyfoox is more than just a collection of tools — we're building a community of creators, innovators, and problem-solvers 
+                united by the belief that technology should be an equalizer, not a divider. Whether you're a student working on research, 
+                an entrepreneur launching a business, a content creator building your brand, or simply someone looking to make daily 
+                digital tasks more efficient, our platform is designed for you.
+              </p>
+              <p>
+                We're constantly expanding our toolkit based on user feedback and emerging needs. If you have suggestions for new features 
+                or tools that would help you achieve your goals, we welcome your input through our <a href="/contact" className="text-primary hover:underline">contact page</a>.
+              </p>
+              <p>
+                As we continue to grow and evolve, our commitment remains unchanged: to provide powerful, accessible, and free digital tools 
+                that help people around the world turn their ideas into reality. Thank you for being part of this journey.
+              </p>
+              
+              <Separator className="my-8" />
+              
+              <div className="text-center">
+                <p className="font-medium">
+                  Ready to experience what Zyfoox has to offer? Explore our complete suite of 
+                  <a href="/" className="text-primary hover:underline ml-1">free AI tools and content downloaders</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }

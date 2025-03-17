@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,6 +18,8 @@ import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import Disclaimer from "./pages/Disclaimer";
+import DMCA from "./pages/DMCA";
 
 // Tool Pages - Lazy loaded
 const PersonalBranding = lazy(() => import("./pages/tools/PersonalBranding"));
@@ -59,8 +60,17 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<BlogPost />} />
               
+              {/* Legal Pages */}
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/disclaimer" element={<Disclaimer />} />
+              <Route path="/dmca" element={<DMCA />} />
+              <Route path="/contact" element={<Contact />} />
+              
               {/* Original Tool Routes */}
               <Route path="/tools" element={<Navigate to="/tools/personal-branding" />} />
+              
+              {/* Tool Routes */}
               <Route 
                 path="/tools/personal-branding" 
                 element={
@@ -199,12 +209,6 @@ const App = () => (
                   </Suspense>
                 } 
               />
-              
-              {/* Other Routes */}
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/terms" element={<TermsOfService />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/pricing" element={<NotFound />} />
               
               {/* 404 Route */}
               <Route path="*" element={<NotFound />} />
