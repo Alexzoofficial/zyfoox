@@ -14,6 +14,14 @@ export default function PricingSection() {
     "Fast processing for all tools",
   ];
 
+  const scrollToTools = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const toolsSection = document.getElementById('tools-section');
+    if (toolsSection) {
+      toolsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="pricing-section" className="py-20 px-4">
       <div className="container mx-auto max-w-6xl">
@@ -47,12 +55,12 @@ export default function PricingSection() {
                 ))}
               </ul>
               
-              <Button className="w-full py-6 text-lg" size="lg">
+              <Button className="w-full py-6 text-lg" size="lg" onClick={scrollToTools}>
                 Get Premium Access
               </Button>
               
               <p className="text-center text-sm text-muted-foreground mt-4">
-                Secure payment processing. Cancel anytime.
+                Completely free. No credit card required.
               </p>
             </div>
           </div>

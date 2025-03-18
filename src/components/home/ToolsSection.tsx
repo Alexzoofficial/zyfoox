@@ -1,10 +1,8 @@
-
 import { Brain, MessageSquare, Briefcase, MessagesSquare, Lightbulb, Play, MessageCircle, Video, Download, MoveVertical, Image, Instagram, CirclePlay, Facebook, Music, Twitter } from "lucide-react";
 import ToolCard from "../ui/ToolCard";
 
 export default function ToolsSection() {
   const tools = [
-    // Original Tools
     {
       title: "Personal Branding Service",
       description: "Optimize your LinkedIn & X presence with AI-generated profiles, posts, and content strategies.",
@@ -62,7 +60,6 @@ export default function ToolsSection() {
       delay: 500
     },
     
-    // New Downloader Tools
     {
       title: "YouTube Video Downloader",
       description: "Download YouTube videos in high quality MP4, MP3, and other formats for free.",
@@ -129,7 +126,7 @@ export default function ToolsSection() {
   ];
 
   return (
-    <section className="py-20 px-4" id="tools">
+    <section id="tools-section" className="py-20 px-4 bg-gradient-to-b from-background to-secondary/10">
       <div className="container mx-auto">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Our AI-Powered Tools</h2>
