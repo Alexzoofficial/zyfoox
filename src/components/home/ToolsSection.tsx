@@ -1,4 +1,5 @@
-import { Brain, MessageSquare, Briefcase, MessagesSquare, Lightbulb, Play, MessageCircle, Video, Download, MoveVertical, Image, Instagram, CirclePlay, Facebook, Music, Twitter } from "lucide-react";
+
+import { Brain, MessageSquare, Briefcase, MessagesSquare, Lightbulb, Play, MessageCircle, Video, Download, MoveVertical, Image, Instagram, CirclePlay, Facebook, Music, Twitter, Copy, FileText, FileImage, Database, Key } from "lucide-react";
 import ToolCard from "../ui/ToolCard";
 
 export default function ToolsSection() {
@@ -121,6 +122,36 @@ export default function ToolsSection() {
       description: "Download Twitter/X videos in high quality for free without registration.",
       icon: <Twitter size={24} />,
       path: "/tools/twitter-video-downloader",
+      delay: 400
+    },
+    
+    // New tools
+    {
+      title: "Fake Data Generator",
+      description: "Generate realistic fake data including names, emails, addresses, and phone numbers for testing.",
+      icon: <Database size={24} />,
+      path: "/tools/fake-data-generator",
+      delay: 100
+    },
+    {
+      title: "Password Generator",
+      description: "Create strong, secure passwords with customizable length, symbols, numbers, and more.",
+      icon: <Key size={24} />,
+      path: "/tools/password-generator",
+      delay: 200
+    },
+    {
+      title: "Image Compressor",
+      description: "Reduce image file sizes while maintaining quality for faster website loading and sharing.",
+      icon: <FileImage size={24} />,
+      path: "/tools/image-compressor",
+      delay: 300
+    },
+    {
+      title: "Image Format Converter",
+      description: "Convert images between different formats: JPG, PNG, WEBP, SVG, and more with ease.",
+      icon: <Copy size={24} />,
+      path: "/tools/image-format-converter",
       delay: 400
     }
   ];

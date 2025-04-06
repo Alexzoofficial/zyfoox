@@ -44,6 +44,12 @@ const FacebookReelsDownloader = lazy(() => import("./pages/tools/FacebookReelsDo
 const TikTokVideoDownloader = lazy(() => import("./pages/tools/TikTokVideoDownloader"));
 const TwitterVideoDownloader = lazy(() => import("./pages/tools/TwitterVideoDownloader"));
 
+// New Utility Tool Pages - Lazy loaded
+const FakeDataGenerator = lazy(() => import("./pages/tools/FakeDataGenerator"));
+const PasswordGenerator = lazy(() => import("./pages/tools/PasswordGenerator"));
+const ImageCompressor = lazy(() => import("./pages/tools/ImageCompressor"));
+const ImageFormatConverter = lazy(() => import("./pages/tools/ImageFormatConverter"));
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -209,6 +215,40 @@ const App = () => (
                 element={
                   <Suspense fallback={<div>Loading...</div>}>
                     <TwitterVideoDownloader />
+                  </Suspense>
+                } 
+              />
+              
+              {/* New Utility Tool Routes */}
+              <Route 
+                path="/tools/fake-data-generator" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <FakeDataGenerator />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/password-generator" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <PasswordGenerator />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/image-compressor" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <ImageCompressor />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/image-format-converter" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <ImageFormatConverter />
                   </Suspense>
                 } 
               />
