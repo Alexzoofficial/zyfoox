@@ -68,7 +68,7 @@ const App = () => (
               <Route path="/disclaimer" element={<Disclaimer />} />
               <Route path="/dmca" element={<DMCA />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/sitemap.html" element={<Sitemap />} />
+              <Route path="/sitemap" element={<Sitemap />} />
               
               {/* Original Tool Routes */}
               <Route path="/tools" element={<Navigate to="/tools/personal-branding" />} />
