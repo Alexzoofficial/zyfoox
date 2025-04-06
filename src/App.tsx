@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,6 +21,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Disclaimer from "./pages/Disclaimer";
 import DMCA from "./pages/DMCA";
+import Sitemap from "./pages/Sitemap";
 
 // Tool Pages - Lazy loaded
 const PersonalBranding = lazy(() => import("./pages/tools/PersonalBranding"));
@@ -66,6 +68,7 @@ const App = () => (
               <Route path="/disclaimer" element={<Disclaimer />} />
               <Route path="/dmca" element={<DMCA />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/sitemap.html" element={<Sitemap />} />
               
               {/* Original Tool Routes */}
               <Route path="/tools" element={<Navigate to="/tools/personal-branding" />} />

@@ -138,6 +138,9 @@ export default function Footer() {
             <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Terms of Service
             </Link>
+            <Link to="/sitemap.html" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Sitemap
+            </Link>
           </div>
         </div>
       </div>
