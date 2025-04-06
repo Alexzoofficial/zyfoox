@@ -1,19 +1,21 @@
 
-// This is a placeholder for the OpenRouter API integration
+// This is a placeholder for the Gemini API integration
 // In a real implementation, we'd handle this securely on a backend
 
-export interface OpenRouterResponse {
-  choices: {
-    message: {
-      content: string;
+export interface GeminiResponse {
+  candidates: {
+    content: {
+      parts: {
+        text: string;
+      }[];
     };
   }[];
 }
 
 // Replace with actual implementation that uses a backend to securely call the API
-export async function callOpenRouter(
+export async function callGeminiAPI(
   prompt: string,
-  apiKey: string = "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"
+  apiKey: string = "AIzaSyDQkB7z0oA0n1bE3HU7M78Ny0LWlayfu2Y"
 ): Promise<string> {
   console.log("AI prompt:", prompt);
   
@@ -52,7 +54,7 @@ export async function callOpenRouter(
   });
 }
 
-// Specific tool functions that leverage the OpenRouter API
+// Specific tool functions that leverage the Gemini API
 
 export async function generatePersonalBranding(formData: Record<string, string>): Promise<string> {
   const prompt = `
@@ -71,7 +73,7 @@ export async function generatePersonalBranding(formData: Record<string, string>)
     4. Engagement tactics for both platforms
   `;
   
-  return callOpenRouter(prompt);
+  return callGeminiAPI(prompt);
 }
 
 export async function generateStudyNotes(formData: Record<string, string>): Promise<string> {
@@ -89,7 +91,7 @@ export async function generateStudyNotes(formData: Record<string, string>): Prom
     4. Study questions for comprehension check
   `;
   
-  return callOpenRouter(prompt);
+  return callGeminiAPI(prompt);
 }
 
 export async function generateBusinessNames(formData: Record<string, string>): Promise<string> {
@@ -108,7 +110,7 @@ export async function generateBusinessNames(formData: Record<string, string>): P
     3. Brand identity considerations (colors, typography, logo ideas)
   `;
   
-  return callOpenRouter(prompt);
+  return callGeminiAPI(prompt);
 }
 
 export async function generateMemeMarketing(formData: Record<string, string>): Promise<string> {
@@ -128,7 +130,7 @@ export async function generateMemeMarketing(formData: Record<string, string>): P
     4. Relevant hashtag strategy
   `;
   
-  return callOpenRouter(prompt);
+  return callGeminiAPI(prompt);
 }
 
 export async function generateBusinessIdeas(formData: Record<string, string>): Promise<string> {
@@ -149,7 +151,7 @@ export async function generateBusinessIdeas(formData: Record<string, string>): P
     6. Growth strategy outline
   `;
   
-  return callOpenRouter(prompt);
+  return callGeminiAPI(prompt);
 }
 
 export async function generateHooks(formData: Record<string, string>): Promise<string> {
@@ -168,7 +170,7 @@ export async function generateHooks(formData: Record<string, string>): Promise<s
     3. On-screen text suggestions
   `;
   
-  return callOpenRouter(prompt);
+  return callGeminiAPI(prompt);
 }
 
 export async function generateWhatsAppMarketing(formData: Record<string, string>): Promise<string> {
@@ -187,7 +189,7 @@ export async function generateWhatsAppMarketing(formData: Record<string, string>
     3. Broadcast strategy (timing, frequency, segmentation)
   `;
   
-  return callOpenRouter(prompt);
+  return callGeminiAPI(prompt);
 }
 
 export async function generateYouTubeBranding(formData: Record<string, string>): Promise<string> {
@@ -207,5 +209,5 @@ export async function generateYouTubeBranding(formData: Record<string, string>):
     4. Channel growth strategy by subscriber milestone
   `;
   
-  return callOpenRouter(prompt);
+  return callGeminiAPI(prompt);
 }
