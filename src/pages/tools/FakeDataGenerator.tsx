@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import ToolHero from "@/components/tools/ToolHero";
@@ -13,6 +12,23 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 
+interface PersonAddress {
+  street: string;
+  city: string;
+  state: string;
+  stateAbbr: string;
+  zipCode: number;
+}
+
+interface Person {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email?: string;
+  phoneNumber?: string;
+  address?: PersonAddress;
+}
+
 export default function FakeDataGenerator() {
   const { toast } = useToast();
   const [quantity, setQuantity] = useState(5);
@@ -24,7 +40,6 @@ export default function FakeDataGenerator() {
   const [result, setResult] = useState("");
   const [format, setFormat] = useState("json");
 
-  // Sample data for generation
   const firstNames = [
     "Emma", "Liam", "Olivia", "Noah", "Ava", "William", "Sophia", "James", "Isabella", "Benjamin", 
     "Mia", "Lucas", "Charlotte", "Mason", "Amelia", "Ethan", "Harper", "Alexander", "Evelyn", "Henry",
@@ -66,13 +81,12 @@ export default function FakeDataGenerator() {
     "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
     "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ"
   ];
-  
-  // Generate random data
+
   const generateRandomData = () => {
     setIsGenerating(true);
     setTimeout(() => {
       try {
-        let generatedData = [];
+        let generatedData: Person[] = [];
         
         for (let i = 0; i < quantity; i++) {
           const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
@@ -87,7 +101,7 @@ export default function FakeDataGenerator() {
           const stateAbbr = stateAbbreviations[stateIndex];
           const zipCode = Math.floor(Math.random() * 90000) + 10000;
           
-          let person = { id: i + 1, firstName, lastName };
+          let person: Person = { id: i + 1, firstName, lastName };
           
           if (dataType === "all" || dataType === "email") {
             if (includeEmail) {
@@ -119,7 +133,6 @@ export default function FakeDataGenerator() {
         if (format === "json") {
           setResult(JSON.stringify(generatedData, null, 2));
         } else if (format === "csv") {
-          // Create CSV header
           let csvContent = [];
           const headers = ["id", "firstName", "lastName"];
           
@@ -137,7 +150,6 @@ export default function FakeDataGenerator() {
           
           csvContent.push(headers.join(","));
           
-          // Add data rows
           generatedData.forEach(person => {
             let row = [person.id, person.firstName, person.lastName];
             
@@ -179,7 +191,7 @@ export default function FakeDataGenerator() {
       } finally {
         setIsGenerating(false);
       }
-    }, 800); // Simulate processing time
+    }, 800);
   };
 
   const copyToClipboard = () => {

@@ -11,7 +11,7 @@ import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Select } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export default function ImageCompressor() {
@@ -420,10 +420,14 @@ export default function ImageCompressor() {
                             <Select
                               value={targetUnit}
                               onValueChange={setTargetUnit}
-                              className="mt-1"
                             >
-                              <option value="KB">KB</option>
-                              <option value="MB">MB</option>
+                              <SelectTrigger id="targetUnit">
+                                <SelectValue placeholder="Select unit" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="KB">KB</SelectItem>
+                                <SelectItem value="MB">MB</SelectItem>
+                              </SelectContent>
                             </Select>
                           </div>
                         </div>
