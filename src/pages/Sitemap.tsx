@@ -67,6 +67,18 @@ export default function Sitemap() {
         </section>
         
         <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">Utility Tools</h2>
+          <ul className="space-y-2">
+            <li><Link to="/tools/fake-data-generator" className="text-primary hover:underline">Fake Data Generator</Link></li>
+            <li><Link to="/tools/password-generator" className="text-primary hover:underline">Password Generator</Link></li>
+            <li><Link to="/tools/image-compressor" className="text-primary hover:underline">Image Compressor</Link></li>
+            <li><Link to="/tools/image-format-converter" className="text-primary hover:underline">Image Format Converter</Link></li>
+            <li><Link to="/tools/background-remover" className="text-primary hover:underline">Background Remover</Link></li>
+            <li><Link to="/tools/url-shortener" className="text-primary hover:underline">URL Shortener</Link></li>
+          </ul>
+        </section>
+        
+        <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Blog Posts by Category</h2>
           
           {toolCategories.map(tool => {

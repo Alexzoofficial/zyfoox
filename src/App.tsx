@@ -33,7 +33,7 @@ const HookGenerator = lazy(() => import("./pages/tools/HookGenerator"));
 const WhatsAppMarketing = lazy(() => import("./pages/tools/WhatsAppMarketing"));
 const YouTubeBranding = lazy(() => import("./pages/tools/YouTubeBranding"));
 
-// New Downloader Tool Pages - Lazy loaded
+// Downloader Tool Pages - Lazy loaded
 const YouTubeVideoDownloader = lazy(() => import("./pages/tools/YouTubeVideoDownloader"));
 const YouTubeShortsDownloader = lazy(() => import("./pages/tools/YouTubeShortsDownloader"));
 const YouTubeThumbnailDownloader = lazy(() => import("./pages/tools/YouTubeThumbnailDownloader"));
@@ -44,11 +44,15 @@ const FacebookReelsDownloader = lazy(() => import("./pages/tools/FacebookReelsDo
 const TikTokVideoDownloader = lazy(() => import("./pages/tools/TikTokVideoDownloader"));
 const TwitterVideoDownloader = lazy(() => import("./pages/tools/TwitterVideoDownloader"));
 
-// New Utility Tool Pages - Lazy loaded
+// Utility Tool Pages - Lazy loaded
 const FakeDataGenerator = lazy(() => import("./pages/tools/FakeDataGenerator"));
 const PasswordGenerator = lazy(() => import("./pages/tools/PasswordGenerator"));
 const ImageCompressor = lazy(() => import("./pages/tools/ImageCompressor"));
 const ImageFormatConverter = lazy(() => import("./pages/tools/ImageFormatConverter"));
+
+// New Tool Pages - Lazy loaded
+const BackgroundRemover = lazy(() => import("./pages/tools/BackgroundRemover"));
+const UrlShortener = lazy(() => import("./pages/tools/UrlShortener"));
 
 const queryClient = new QueryClient();
 
@@ -145,7 +149,7 @@ const App = () => (
                 } 
               />
               
-              {/* New Downloader Tool Routes */}
+              {/* Downloader Tool Routes */}
               <Route 
                 path="/tools/youtube-video-downloader" 
                 element={
@@ -219,7 +223,7 @@ const App = () => (
                 } 
               />
               
-              {/* New Utility Tool Routes */}
+              {/* Utility Tool Routes */}
               <Route 
                 path="/tools/fake-data-generator" 
                 element={
@@ -249,6 +253,24 @@ const App = () => (
                 element={
                   <Suspense fallback={<div>Loading...</div>}>
                     <ImageFormatConverter />
+                  </Suspense>
+                } 
+              />
+              
+              {/* New Tool Routes */}
+              <Route 
+                path="/tools/background-remover" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <BackgroundRemover />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/url-shortener" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <UrlShortener />
                   </Suspense>
                 } 
               />

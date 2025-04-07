@@ -1,5 +1,5 @@
 
-import { Brain, MessageSquare, Briefcase, MessagesSquare, Lightbulb, Play, MessageCircle, Video, Download, MoveVertical, Image, Instagram, CirclePlay, Facebook, Music, Twitter, Copy, FileText, FileImage, Database, Key } from "lucide-react";
+import { Brain, MessageSquare, Briefcase, MessagesSquare, Lightbulb, Play, MessageCircle, Video, Download, MoveVertical, Image, Instagram, CirclePlay, Facebook, Music, Twitter, Copy, FileText, FileImage, Database, Key, Link, Clock, Calculator, Crop, Text } from "lucide-react";
 import ToolCard from "../ui/ToolCard";
 
 export default function ToolsSection() {
@@ -125,7 +125,7 @@ export default function ToolsSection() {
       delay: 400
     },
     
-    // New tools
+    // Utility tools
     {
       title: "Fake Data Generator",
       description: "Generate realistic fake data including names, emails, addresses, and phone numbers for testing.",
@@ -153,6 +153,85 @@ export default function ToolsSection() {
       icon: <Copy size={24} />,
       path: "/tools/image-format-converter",
       delay: 400
+    },
+    
+    // New tools
+    {
+      title: "Background Remover",
+      description: "Remove backgrounds from images instantly with AI. Get transparent background images in seconds.",
+      icon: <Image size={24} />,
+      path: "/tools/background-remover",
+      delay: 100
+    },
+    {
+      title: "URL Shortener",
+      description: "Create short, shareable links from long URLs. Track clicks and manage your shortened links easily.",
+      icon: <Link size={24} />,
+      path: "/tools/url-shortener",
+      delay: 200
+    },
+    {
+      title: "Age Calculator",
+      description: "Calculate exact age in years, months, and days between any two dates with precision.",
+      icon: <Clock size={24} />,
+      path: "/tools/age-calculator",
+      delay: 300
+    },
+    {
+      title: "SIP Calculator",
+      description: "Plan your investments with our Systematic Investment Plan calculator. Calculate returns and growth.",
+      icon: <Calculator size={24} />,
+      path: "/tools/sip-calculator",
+      delay: 400
+    },
+    {
+      title: "Image Resizer",
+      description: "Resize images to exact dimensions while maintaining quality. Perfect for social media and websites.",
+      icon: <Image size={24} />,
+      path: "/tools/image-resizer",
+      delay: 500
+    },
+    {
+      title: "Image Cropper",
+      description: "Crop images precisely with our easy-to-use tool. Perfect for profile pictures and focused content.",
+      icon: <Crop size={24} />,
+      path: "/tools/image-cropper",
+      delay: 100
+    },
+    {
+      title: "Text to Speech",
+      description: "Convert text to natural-sounding voice audio in multiple languages and accents.",
+      icon: <Text size={24} />,
+      path: "/tools/text-to-speech",
+      delay: 200
+    },
+    {
+      title: "EMI Calculator",
+      description: "Calculate your Equated Monthly Installments for loans with customizable interest rates and terms.",
+      icon: <Calculator size={24} />,
+      path: "/tools/emi-calculator",
+      delay: 300
+    },
+    {
+      title: "GST Calculator",
+      description: "Calculate GST amounts and final prices with our easy-to-use Goods and Services Tax calculator.",
+      icon: <Calculator size={24} />,
+      path: "/tools/gst-calculator",
+      delay: 400
+    },
+    {
+      title: "Article Generator",
+      description: "Generate high-quality, SEO-optimized articles on any topic with our AI-powered tool.",
+      icon: <FileText size={24} />,
+      path: "/tools/article-generator",
+      delay: 500
+    },
+    {
+      title: "Name Customizer",
+      description: "Create stylish, unique names with special symbols and fonts for social media profiles and more.",
+      icon: <Text size={24} />,
+      path: "/tools/name-customizer",
+      delay: 100
     }
   ];
 
