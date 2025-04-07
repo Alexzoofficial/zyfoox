@@ -2,7 +2,7 @@
 import { useState, useRef, ChangeEvent } from "react";
 import { Helmet } from "react-helmet-async";
 import ToolHero from "@/components/tools/ToolHero";
-import { Image, Download, Trash } from "lucide-react";
+import { Image as ImageIcon, Download, Trash } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,7 +52,7 @@ export default function ImageResizer() {
     setResizedUrl(null);
     
     // Get original dimensions
-    const img = new Image();
+    const img = document.createElement("img");
     img.onload = () => {
       setOriginalDimensions({
         width: img.width,
@@ -102,7 +102,7 @@ export default function ImageResizer() {
       }
       
       // Load the image
-      const img = new Image();
+      const img = document.createElement("img");
       img.src = previewUrl;
       
       await new Promise((resolve, reject) => {
@@ -183,7 +183,7 @@ export default function ImageResizer() {
       <ToolHero
         title="Image Resizer"
         description="Resize your images to exact dimensions without losing quality. Perfect for social media, web, or print."
-        icon={<Image size={24} />}
+        icon={<ImageIcon size={24} />}
       />
 
       <div className="container mx-auto max-w-4xl px-4 py-8">
@@ -315,7 +315,7 @@ export default function ImageResizer() {
                   />
                 ) : (
                   <div className="text-center text-muted-foreground">
-                    <Image size={48} className="mx-auto mb-2 opacity-20" />
+                    <ImageIcon size={48} className="mx-auto mb-2 opacity-20" />
                     <p>Upload an image to see preview</p>
                   </div>
                 )}
