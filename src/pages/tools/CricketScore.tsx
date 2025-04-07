@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { Cricket, RefreshCw } from "lucide-react";
+import { Activity } from "lucide-react";
 import ToolHero from "@/components/tools/ToolHero";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -173,7 +172,7 @@ export default function CricketScore() {
       <ToolHero
         title="Live Cricket Scores"
         description="Get real-time cricket scores and match updates from around the world."
-        icon={<Cricket size={24} />}
+        icon={<Activity size={24} />}
       />
 
       <div className="container mx-auto max-w-4xl px-4 py-8">
