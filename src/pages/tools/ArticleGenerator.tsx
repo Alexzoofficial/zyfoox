@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import ToolHero from "@/components/tools/ToolHero";
 import { FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ToolInterface from "@/components/tools/ToolInterface";
+import { generateArticle } from "@/lib/ai";
 
 export default function ArticleGenerator() {
   const { toast } = useToast();
@@ -61,123 +61,6 @@ export default function ArticleGenerator() {
       placeholder: "Any specific points to cover, references to include, or other requirements"
     }
   ];
-
-  // This function would normally connect to an AI service
-  // We're providing a demonstration version that doesn't actually use an API
-  const generateArticle = async (formData: Record<string, string>): Promise<string> => {
-    try {
-      // Validate required fields
-      if (!formData.topic || !formData.tone || !formData.length) {
-        throw new Error("Missing required fields");
-      }
-      
-      // In a real implementation, this would be an API call to an AI service
-      // For demonstration, we'll simulate a delay and return a templated response
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Create a sample article based on the input
-      const { topic, keywords, tone, length, audience, additionalInstructions } = formData;
-      
-      // Generate a sample title
-      const title = `${topic.charAt(0).toUpperCase() + topic.slice(1)}: A Comprehensive Guide`;
-      
-      // Generate intro paragraph based on tone
-      let introStyle = "";
-      switch (tone) {
-        case "informative":
-          introStyle = "clear and educational";
-          break;
-        case "conversational":
-          introStyle = "friendly and engaging";
-          break;
-        case "professional":
-          introStyle = "formal and authoritative";
-          break;
-        case "persuasive":
-          introStyle = "compelling and convincing";
-          break;
-        case "entertaining":
-          introStyle = "lively and captivating";
-          break;
-        default:
-          introStyle = "informative";
-      }
-      
-      // Generate audience-specific content
-      const audienceText = audience 
-        ? `This article is specifically written for ${audience} who want to learn more about ${topic}.` 
-        : `This article aims to provide valuable information about ${topic} for all readers.`;
-      
-      // Parse keywords
-      const keywordList = keywords 
-        ? keywords.split(',').map(k => k.trim()).filter(k => k) 
-        : [];
-      
-      const keywordText = keywordList.length > 0 
-        ? `This article will cover key concepts including ${keywordList.join(', ')}.` 
-        : '';
-      
-      // Build the article template
-      const article = `# ${title}
-
-## Introduction
-
-${audienceText} In this ${introStyle} article, we'll explore the essential aspects of ${topic} and provide you with actionable insights. ${keywordText}
-
-## Understanding ${topic.charAt(0).toUpperCase() + topic.slice(1)}
-
-${topic.charAt(0).toUpperCase() + topic.slice(1)} has become increasingly important in today's world. Whether you're just getting started or looking to deepen your knowledge, understanding the fundamentals is crucial.
-
-${keywordList.length > 0 ? `One key aspect to consider is ${keywordList[0]}.` : ''}
-
-## Key Benefits and Considerations
-
-When approaching ${topic}, keep these important points in mind:
-
-1. **Research thoroughly**: Understanding the background and context is essential
-2. **Consider different perspectives**: There are multiple ways to approach ${topic}
-3. **Apply practical knowledge**: Theory without application has limited value
-${keywordList.length > 1 ? `4. **Focus on ${keywordList[1]}**: This often-overlooked aspect can make a significant difference` : ''}
-
-## Best Practices for ${topic.charAt(0).toUpperCase() + topic.slice(1)}
-
-To get the most out of your experience with ${topic}, consider these best practices:
-
-- Start with clear objectives
-- Develop a structured approach
-- Regularly review and adjust your methods
-- Seek feedback from others
-${keywordList.length > 2 ? `- Pay special attention to ${keywordList[2]}` : ''}
-
-## Common Challenges and Solutions
-
-Like any endeavor, working with ${topic} comes with its challenges. Here are some common issues and how to address them:
-
-### Challenge 1: Limited Resources
-Solution: Prioritize what's most important and leverage existing tools and information.
-
-### Challenge 2: Information Overload
-Solution: Focus on high-quality sources and create a systematic approach to organizing information.
-
-${additionalInstructions ? `## Additional Considerations\n\n${additionalInstructions}\n\n` : ''}
-
-## Conclusion
-
-In this article, we've explored the key aspects of ${topic}. By understanding the fundamentals, applying best practices, and addressing common challenges, you'll be well-equipped to succeed. Remember that mastering ${topic} is a journey that requires consistent effort and learning.
-
-We hope this guide helps you navigate ${topic} more effectively and achieve your goals.`;
-
-      return article;
-    } catch (error) {
-      console.error("Error generating article:", error);
-      toast({
-        title: "Generation failed",
-        description: "There was an error generating your article. Please try again.",
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
 
   return (
     <>

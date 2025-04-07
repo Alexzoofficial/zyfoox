@@ -1,7 +1,6 @@
-
 import { useState, useRef } from "react";
 import { Helmet } from "react-helmet-async";
-import { Upload, Image, Trash, Download } from "lucide-react";
+import { Upload, Image as ImageIcon, Trash, Download } from "lucide-react";
 import ToolHero from "@/components/tools/ToolHero";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -18,9 +17,8 @@ export default function BackgroundRemover() {
   const [selectedTab, setSelectedTab] = useState("upload");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
-
-  // API key for remove.bg
-  const API_KEY = "lgjmutxnwx1h6mahp6hpy2qa";
+  const [apiKey, setApiKey] = useState<string>("sk_67a81c85d2746b1b6a49bf837119bd5137c35a8dd665c330");
+  const [showApiKeyInput, setShowApiKeyInput] = useState<boolean>(false);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -95,7 +93,7 @@ export default function BackgroundRemover() {
       const response = await fetch('https://api.remove.bg/v1.0/removebg', {
         method: 'POST',
         headers: {
-          'X-Api-Key': API_KEY,
+          'X-Api-Key': apiKey,
         },
         body: formData,
       });
@@ -159,7 +157,7 @@ export default function BackgroundRemover() {
       <ToolHero
         title="Background Remover"
         description="Remove backgrounds from images with AI in seconds. Get high-quality transparent background images for free."
-        icon={<Image size={28} />}
+        icon={<ImageIcon size={28} />}
       />
 
       <div className="container mx-auto py-12 px-4 max-w-5xl">
@@ -241,7 +239,7 @@ export default function BackgroundRemover() {
                     />
                   ) : (
                     <div className="text-gray-500 text-center flex flex-col items-center">
-                      <Image size={48} className="mb-2 opacity-30" />
+                      <ImageIcon size={48} className="mb-2 opacity-30" />
                       <p>Click "Remove Background" to process the image</p>
                     </div>
                   )}

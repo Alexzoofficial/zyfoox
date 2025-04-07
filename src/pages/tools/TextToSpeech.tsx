@@ -1,9 +1,12 @@
-
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import ToolHero from "@/components/tools/ToolHero";
 import { Text } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 // Voice options with their IDs
 const voices = [
@@ -22,8 +25,8 @@ export default function TextToSpeech() {
   const [voiceId, setVoiceId] = useState<string>(voices[0].id);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [apiKey, setApiKey] = useState<string>("");
-  const [showApiKeyInput, setShowApiKeyInput] = useState<boolean>(true);
+  const [apiKey, setApiKey] = useState<string>("sk_67a81c85d2746b1b6a49bf837119bd5137c35a8dd665c330");
+  const [showApiKeyInput, setShowApiKeyInput] = useState<boolean>(false);
   
   const { toast } = useToast();
 
@@ -37,46 +40,42 @@ export default function TextToSpeech() {
       return;
     }
     
-    if (!apiKey.trim()) {
-      toast({
-        title: "API key required",
-        description: "Please enter your ElevenLabs API key to use this feature",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     setIsGenerating(true);
     setAudioUrl(null);
     
     try {
-      // Mock API call for demo purposes
-      // In a real implementation, this would be a fetch to the ElevenLabs API
-      // We're simulating a successful response for demonstration
+      // Make an actual API call to ElevenLabs
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'audio/mpeg',
+          'Content-Type': 'application/json',
+          'xi-api-key': apiKey
+        },
+        body: JSON.stringify({
+          text: text,
+          model_id: "eleven_monolingual_v1",
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.5
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+
+      // Get audio data and create URL
+      const audioBlob = await response.blob();
+      const url = URL.createObjectURL(audioBlob);
+      setAudioUrl(url);
       
-      // Wait for 2 seconds to simulate API processing time
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // For demonstration, we'll create a fake audio URL
-      // In reality, you would process the API response to get the audio blob
-      
-      // Simulate successful generation
       toast({
         title: "Audio generated successfully",
         description: "Your text has been converted to speech",
       });
       
-      // In a real implementation, you would:
-      // 1. Make an actual API call to ElevenLabs
-      // 2. Convert the response to a blob
-      // 3. Create an object URL from the blob
-      // 4. Set that URL to the audioUrl state
-      
-      // For now, we're using a sample audio for demonstration
-      setAudioUrl("https://audio-samples.github.io/samples/mp3/blizzard_biased/sample-1.mp3");
-      
-      // Set showApiKeyInput to false after successful generation
-      setShowApiKeyInput(false);
     } catch (error) {
       console.error("Error generating audio:", error);
       toast({
@@ -118,37 +117,17 @@ export default function TextToSpeech() {
       <div className="container mx-auto max-w-4xl px-4 py-8">
         <div className="grid grid-cols-1 gap-8">
           <div className="animate-fade-in">
-            <div className="glass-card rounded-xl p-6">
+            <Card className="p-6">
               <h2 className="text-xl font-semibold mb-4">Convert Text to Speech</h2>
-              
-              {showApiKeyInput && (
-                <div className="mb-6 p-4 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
-                  <h3 className="font-medium text-amber-800 dark:text-amber-300 mb-2">API Key Required</h3>
-                  <p className="text-sm text-amber-700 dark:text-amber-400 mb-3">
-                    This tool uses ElevenLabs API for high-quality voice synthesis. Please enter your API key below:
-                  </p>
-                  <input
-                    type="password"
-                    placeholder="Enter your ElevenLabs API key"
-                    className="glass-input w-full px-3 py-2 rounded-lg focus:ring-1 focus:ring-primary focus:outline-none mb-2"
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                  />
-                  <p className="text-xs text-amber-700 dark:text-amber-400">
-                    Don't have an API key? <a href="https://elevenlabs.io/" target="_blank" rel="noopener noreferrer" className="underline">Sign up at ElevenLabs</a> to get one.
-                    Your key remains private and is never stored on our servers.
-                  </p>
-                </div>
-              )}
               
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="voice-select" className="block text-sm font-medium">
+                  <Label htmlFor="voice-select" className="block text-sm font-medium">
                     Select Voice
-                  </label>
+                  </Label>
                   <select
                     id="voice-select"
-                    className="glass-input w-full px-3 py-2 rounded-lg focus:ring-1 focus:ring-primary focus:outline-none"
+                    className="w-full px-3 py-2 rounded-lg border border-input bg-background focus:ring-1 focus:ring-primary focus:outline-none"
                     value={voiceId}
                     onChange={(e) => setVoiceId(e.target.value)}
                   >
@@ -161,12 +140,12 @@ export default function TextToSpeech() {
                 </div>
                 
                 <div className="space-y-2">
-                  <label htmlFor="text-input" className="block text-sm font-medium">
+                  <Label htmlFor="text-input" className="block text-sm font-medium">
                     Enter Text
-                  </label>
-                  <textarea
+                  </Label>
+                  <Textarea
                     id="text-input"
-                    className="glass-input w-full px-3 py-2 rounded-lg focus:ring-1 focus:ring-primary focus:outline-none"
+                    className="w-full px-3 py-2 rounded-lg border border-input bg-background focus:ring-1 focus:ring-primary focus:outline-none"
                     placeholder="Enter the text you want to convert to speech..."
                     rows={6}
                     value={text}
@@ -175,7 +154,7 @@ export default function TextToSpeech() {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <button
+                  <Button
                     onClick={handleGenerate}
                     disabled={isGenerating}
                     className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors disabled:opacity-70 flex items-center justify-center"
@@ -191,14 +170,15 @@ export default function TextToSpeech() {
                     ) : (
                       "Generate Speech"
                     )}
-                  </button>
+                  </Button>
                   
-                  <button
+                  <Button
                     onClick={handleClearAll}
+                    variant="secondary"
                     className="px-4 py-2 bg-secondary text-secondary-foreground rounded-lg font-medium hover:bg-secondary/90 transition-colors"
                   >
                     Clear All
-                  </button>
+                  </Button>
                 </div>
               </div>
               
@@ -220,7 +200,7 @@ export default function TextToSpeech() {
                   </div>
                 </div>
               )}
-            </div>
+            </Card>
           </div>
           
           <div className="mt-6 prose prose-gray dark:prose-invert max-w-none">

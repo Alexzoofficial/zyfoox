@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -62,308 +61,319 @@ const EmiCalculator = lazy(() => import("./pages/tools/EmiCalculator"));
 const GstCalculator = lazy(() => import("./pages/tools/GstCalculator"));
 const ArticleGenerator = lazy(() => import("./pages/tools/ArticleGenerator"));
 const NameCustomizer = lazy(() => import("./pages/tools/NameCustomizer"));
+const CricketScore = lazy(() => import("./pages/tools/CricketScore"));
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <HelmetProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Index />} />
-              
-              {/* About and Blog Routes */}
-              <Route path="/about" element={<About />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:id" element={<BlogPost />} />
-              
-              {/* Legal Pages */}
-              <Route path="/terms" element={<TermsOfService />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/disclaimer" element={<Disclaimer />} />
-              <Route path="/dmca" element={<DMCA />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/sitemap" element={<Sitemap />} />
-              
-              {/* Original Tool Routes */}
-              <Route path="/tools" element={<Navigate to="/tools/personal-branding" />} />
-              
-              {/* Tool Routes */}
-              <Route 
-                path="/tools/personal-branding" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <PersonalBranding />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/study-notes" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <StudyNotes />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/business-names" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <BusinessNames />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/meme-marketing" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <MemeMarketing />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/business-ideas" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <BusinessIdeas />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/hook-generator" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <HookGenerator />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/whatsapp-marketing" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <WhatsAppMarketing />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/youtube-branding" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <YouTubeBranding />
-                  </Suspense>
-                } 
-              />
-              
-              {/* Downloader Tool Routes */}
-              <Route 
-                path="/tools/youtube-video-downloader" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <YouTubeVideoDownloader />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/youtube-shorts-downloader" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <YouTubeShortsDownloader />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/youtube-thumbnail-downloader" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <YouTubeThumbnailDownloader />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/instagram-reels-downloader" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <InstagramReelsDownloader />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/instagram-story-downloader" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <InstagramStoryDownloader />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/facebook-video-downloader" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <FacebookVideoDownloader />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/facebook-reels-downloader" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <FacebookReelsDownloader />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/tiktok-video-downloader" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <TikTokVideoDownloader />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/twitter-video-downloader" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <TwitterVideoDownloader />
-                  </Suspense>
-                } 
-              />
-              
-              {/* Utility Tool Routes */}
-              <Route 
-                path="/tools/fake-data-generator" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <FakeDataGenerator />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/password-generator" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <PasswordGenerator />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/image-compressor" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <ImageCompressor />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/image-format-converter" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <ImageFormatConverter />
-                  </Suspense>
-                } 
-              />
-              
-              {/* New Tool Routes */}
-              <Route 
-                path="/tools/background-remover" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <BackgroundRemover />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/url-shortener" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <UrlShortener />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/age-calculator" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <AgeCalculator />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/sip-calculator" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <SipCalculator />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/image-resizer" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <ImageResizer />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/image-cropper" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <ImageCropper />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/text-to-speech" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <TextToSpeech />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/emi-calculator" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <EmiCalculator />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/gst-calculator" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <GstCalculator />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/article-generator" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <ArticleGenerator />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/tools/name-customizer" 
-                element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <NameCustomizer />
-                  </Suspense>
-                } 
-              />
-              
-              {/* 404 Route */}
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </HelmetProvider>
-);
+function App() {
+  return (
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Index />} />
+                
+                {/* About and Blog Routes */}
+                <Route path="/about" element={<About />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:id" element={<BlogPost />} />
+                
+                {/* Legal Pages */}
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/disclaimer" element={<Disclaimer />} />
+                <Route path="/dmca" element={<DMCA />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/sitemap" element={<Sitemap />} />
+                
+                {/* Original Tool Routes */}
+                <Route path="/tools" element={<Navigate to="/tools/personal-branding" />} />
+                
+                {/* Tool Routes */}
+                <Route 
+                  path="/tools/personal-branding" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <PersonalBranding />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/study-notes" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <StudyNotes />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/business-names" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <BusinessNames />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/meme-marketing" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <MemeMarketing />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/business-ideas" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <BusinessIdeas />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/hook-generator" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <HookGenerator />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/whatsapp-marketing" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <WhatsAppMarketing />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/youtube-branding" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <YouTubeBranding />
+                    </Suspense>
+                  } 
+                />
+                
+                {/* Downloader Tool Routes */}
+                <Route 
+                  path="/tools/youtube-video-downloader" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <YouTubeVideoDownloader />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/youtube-shorts-downloader" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <YouTubeShortsDownloader />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/youtube-thumbnail-downloader" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <YouTubeThumbnailDownloader />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/instagram-reels-downloader" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <InstagramReelsDownloader />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/instagram-story-downloader" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <InstagramStoryDownloader />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/facebook-video-downloader" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <FacebookVideoDownloader />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/facebook-reels-downloader" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <FacebookReelsDownloader />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/tiktok-video-downloader" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <TikTokVideoDownloader />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/twitter-video-downloader" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <TwitterVideoDownloader />
+                    </Suspense>
+                  } 
+                />
+                
+                {/* Utility Tool Routes */}
+                <Route 
+                  path="/tools/fake-data-generator" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <FakeDataGenerator />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/password-generator" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <PasswordGenerator />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/image-compressor" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <ImageCompressor />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/image-format-converter" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <ImageFormatConverter />
+                    </Suspense>
+                  } 
+                />
+                
+                {/* New Tool Routes */}
+                <Route 
+                  path="/tools/background-remover" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <BackgroundRemover />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/url-shortener" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <UrlShortener />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/age-calculator" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <AgeCalculator />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/sip-calculator" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <SipCalculator />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/image-resizer" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <ImageResizer />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/image-cropper" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <ImageCropper />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/text-to-speech" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <TextToSpeech />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/emi-calculator" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <EmiCalculator />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/gst-calculator" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <GstCalculator />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/article-generator" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <ArticleGenerator />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/name-customizer" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <NameCustomizer />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/tools/cricket-score" 
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <CricketScore />
+                    </Suspense>
+                  } 
+                />
+                
+                {/* 404 Route */}
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
+  );
+}
 
 export default App;
