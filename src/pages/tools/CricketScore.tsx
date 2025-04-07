@@ -1,74 +1,19 @@
+
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Activity, RotateCw } from "lucide-react";
 import ToolHero from "@/components/tools/ToolHero";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-// Define types for cricket data
-interface Team {
-  name_Full: string;
-  name: string;
-  shortname?: string;
-}
-
-interface MatchDetail {
-  match_id: string;
-  series_id: string;
-  series_name: string;
-  matchFormat: string;
-  status: string;
-  status_note: string;
-  venue: string;
-  date: string;
-  dateTimeGMT: string;
-  teams: {
-    home: Team;
-    away: Team;
-  };
-  tossResults: {
-    tossWinner: string;
-    decision: string;
-  };
-}
-
-interface Score {
-  runs: number;
-  wickets: number;
-  overs: number;
-}
-
-interface MatchScore {
-  [key: string]: {
-    inning1: Score;
-    inning2?: Score;
-  };
-}
-
-interface CricketMatch {
-  id: string;
-  name: string;
-  matchType: string;
-  status: string;
-  venue: string;
-  date: string;
-  dateTimeGMT: string;
-  teams: {
-    home: Team;
-    away: Team;
-  };
-  score?: MatchScore;
-  scorecard?: any;
-  tossResults?: {
-    tossWinner: string;
-    decision: string;
-  };
-  result?: string;
-  currentInnings?: string;
-}
+import { MatchList } from "@/components/cricket/MatchList";
+import { CricketMatch } from "@/types/cricket";
+import { 
+  fetchCricketMatches, 
+  filterLiveMatches, 
+  filterUpcomingMatches, 
+  filterRecentMatches 
+} from "@/services/cricketService";
 
 export default function CricketScore() {
   const [matches, setMatches] = useState<CricketMatch[]>([]);
@@ -78,27 +23,13 @@ export default function CricketScore() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const { toast } = useToast();
 
-  const API_KEY = "3b1ecd5b-6ebe-484a-9e35-61858f00992e";
-
-  const fetchMatches = async () => {
+  const handleFetchMatches = async () => {
     setLoading(true);
     setError(null);
     
     try {
-      // Get current matches (live, upcoming and recent)
-      const response = await fetch(`https://api.cricapi.com/v1/currentMatches?apikey=${API_KEY}&offset=0`);
-      
-      if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      if (data.status !== "success") {
-        throw new Error(data.message || "Failed to fetch cricket data");
-      }
-      
-      setMatches(data.data || []);
+      const data = await fetchCricketMatches();
+      setMatches(data);
       setLastUpdated(new Date());
     } catch (err) {
       console.error("Error fetching cricket data:", err);
@@ -114,46 +45,15 @@ export default function CricketScore() {
   };
 
   useEffect(() => {
-    fetchMatches();
+    handleFetchMatches();
     
     // Set up polling every 2 minutes
     const intervalId = setInterval(() => {
-      fetchMatches();
+      handleFetchMatches();
     }, 2 * 60 * 1000); // 2 minutes
     
     return () => clearInterval(intervalId);
   }, []);
-
-  const getLiveMatches = () => {
-    return matches.filter(match => match.status !== "Match not started" && match.status !== "Match ended");
-  };
-
-  const getUpcomingMatches = () => {
-    return matches.filter(match => match.status === "Match not started");
-  };
-
-  const getRecentMatches = () => {
-    return matches.filter(match => match.status === "Match ended");
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString(undefined, { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    });
-  };
-
-  const getMatchStatusBadge = (status: string) => {
-    if (status === "Match not started") {
-      return <Badge variant="outline" className="bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300">Upcoming</Badge>;
-    } else if (status === "Match ended") {
-      return <Badge variant="outline" className="bg-gray-50 text-gray-600 dark:bg-gray-800 dark:text-gray-300">Completed</Badge>;
-    } else {
-      return <Badge variant="outline" className="bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-300">Live</Badge>;
-    }
-  };
 
   return (
     <>
@@ -185,7 +85,7 @@ export default function CricketScore() {
           </div>
           <Button 
             variant="outline" 
-            onClick={fetchMatches} 
+            onClick={handleFetchMatches} 
             disabled={loading}
             className="flex items-center gap-2"
           >
@@ -198,9 +98,9 @@ export default function CricketScore() {
           <TabsList className="grid grid-cols-3 mb-6">
             <TabsTrigger value="live" className="relative">
               Live
-              {getLiveMatches().length > 0 && (
+              {filterLiveMatches(matches).length > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
-                  {getLiveMatches().length}
+                  {filterLiveMatches(matches).length}
                 </span>
               )}
             </TabsTrigger>
@@ -208,161 +108,31 @@ export default function CricketScore() {
             <TabsTrigger value="recent">Recent</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="live" className="space-y-4">
-            {loading && <div className="text-center py-8">Loading live matches...</div>}
-            
-            {!loading && getLiveMatches().length === 0 && (
-              <div className="text-center py-8 bg-muted/30 rounded-lg">
-                <p className="text-muted-foreground">No live matches at the moment</p>
-              </div>
-            )}
-            
-            {!loading && getLiveMatches().map((match) => (
-              <Card key={match.id} className="p-4 overflow-hidden">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <span className="text-xs font-medium text-muted-foreground">{match.matchType}</span>
-                    <h3 className="text-sm font-medium">{match.name}</h3>
-                  </div>
-                  {getMatchStatusBadge(match.status)}
-                </div>
-                
-                <div className="space-y-4">
-                  {match.score && Object.keys(match.score).map((teamName) => {
-                    const teamScore = match.score![teamName];
-                    return (
-                      <div key={teamName} className="flex justify-between items-center">
-                        <div className="flex-1">
-                          <p className="font-medium">{teamName}</p>
-                        </div>
-                        <div className="text-right">
-                          {teamScore.inning1 && (
-                            <p className="font-bold">
-                              {teamScore.inning1.runs}/{teamScore.inning1.wickets} 
-                              <span className="text-sm font-normal ml-1">
-                                ({teamScore.inning1.overs} ov)
-                              </span>
-                            </p>
-                          )}
-                          {teamScore.inning2 && (
-                            <p className="text-sm">
-                              & {teamScore.inning2.runs}/{teamScore.inning2.wickets} 
-                              <span className="text-xs font-normal ml-1">
-                                ({teamScore.inning2.overs} ov)
-                              </span>
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                
-                <div className="mt-3 pt-3 border-t border-border">
-                  <p className="text-sm text-muted-foreground">
-                    {match.venue} • {formatDate(match.date)}
-                  </p>
-                  <p className="text-sm font-medium mt-1">{match.status}</p>
-                </div>
-              </Card>
-            ))}
+          <TabsContent value="live">
+            <MatchList 
+              matches={filterLiveMatches(matches)} 
+              loading={loading} 
+              emptyMessage="No live matches at the moment" 
+              loadingMessage="Loading live matches..." 
+            />
           </TabsContent>
           
-          <TabsContent value="upcoming" className="space-y-4">
-            {loading && <div className="text-center py-8">Loading upcoming matches...</div>}
-            
-            {!loading && getUpcomingMatches().length === 0 && (
-              <div className="text-center py-8 bg-muted/30 rounded-lg">
-                <p className="text-muted-foreground">No upcoming matches found</p>
-              </div>
-            )}
-            
-            {!loading && getUpcomingMatches().map((match) => (
-              <Card key={match.id} className="p-4">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <span className="text-xs font-medium text-muted-foreground">{match.matchType}</span>
-                    <h3 className="text-sm font-medium">{match.name}</h3>
-                  </div>
-                  {getMatchStatusBadge(match.status)}
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <p>{match.teams.home.name}</p>
-                    <p>vs</p>
-                    <p>{match.teams.away.name}</p>
-                  </div>
-                </div>
-                
-                <div className="mt-3 pt-3 border-t border-border">
-                  <p className="text-sm text-muted-foreground">
-                    {match.venue} • {formatDate(match.date)}
-                  </p>
-                  <p className="text-sm font-medium mt-1">{new Date(match.dateTimeGMT).toLocaleTimeString()}</p>
-                </div>
-              </Card>
-            ))}
+          <TabsContent value="upcoming">
+            <MatchList 
+              matches={filterUpcomingMatches(matches)} 
+              loading={loading} 
+              emptyMessage="No upcoming matches found" 
+              loadingMessage="Loading upcoming matches..." 
+            />
           </TabsContent>
           
-          <TabsContent value="recent" className="space-y-4">
-            {loading && <div className="text-center py-8">Loading recent matches...</div>}
-            
-            {!loading && getRecentMatches().length === 0 && (
-              <div className="text-center py-8 bg-muted/30 rounded-lg">
-                <p className="text-muted-foreground">No recent matches found</p>
-              </div>
-            )}
-            
-            {!loading && getRecentMatches().map((match) => (
-              <Card key={match.id} className="p-4">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <span className="text-xs font-medium text-muted-foreground">{match.matchType}</span>
-                    <h3 className="text-sm font-medium">{match.name}</h3>
-                  </div>
-                  {getMatchStatusBadge(match.status)}
-                </div>
-                
-                <div className="space-y-4">
-                  {match.score && Object.keys(match.score).map((teamName) => {
-                    const teamScore = match.score![teamName];
-                    return (
-                      <div key={teamName} className="flex justify-between items-center">
-                        <div className="flex-1">
-                          <p className="font-medium">{teamName}</p>
-                        </div>
-                        <div className="text-right">
-                          {teamScore.inning1 && (
-                            <p className="font-bold">
-                              {teamScore.inning1.runs}/{teamScore.inning1.wickets} 
-                              <span className="text-sm font-normal ml-1">
-                                ({teamScore.inning1.overs} ov)
-                              </span>
-                            </p>
-                          )}
-                          {teamScore.inning2 && (
-                            <p className="text-sm">
-                              & {teamScore.inning2.runs}/{teamScore.inning2.wickets} 
-                              <span className="text-xs font-normal ml-1">
-                                ({teamScore.inning2.overs} ov)
-                              </span>
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                
-                <div className="mt-3 pt-3 border-t border-border">
-                  <p className="text-sm text-muted-foreground">
-                    {match.venue} • {formatDate(match.date)}
-                  </p>
-                  {match.result && <p className="text-sm font-medium mt-1">{match.result}</p>}
-                </div>
-              </Card>
-            ))}
+          <TabsContent value="recent">
+            <MatchList 
+              matches={filterRecentMatches(matches)} 
+              loading={loading} 
+              emptyMessage="No recent matches found" 
+              loadingMessage="Loading recent matches..." 
+            />
           </TabsContent>
         </Tabs>
         
