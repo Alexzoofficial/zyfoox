@@ -1,30 +1,41 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, ChangeEvent } from "react";
 import { Helmet } from "react-helmet-async";
 import ToolHero from "@/components/tools/ToolHero";
-import { Image, ArrowDown, FileImage, Download, X } from "lucide-react";
+import { Image, Download, Trash } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { 
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 
 export default function ImageResizer() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [originalDimensions, setOriginalDimensions] = useState<{ width: number; height: number } | null>(null);
-  const [width, setWidth] = useState<number>(0);
-  const [height, setHeight] = useState<number>(0);
-  const [maintainAspectRatio, setMaintainAspectRatio] = useState<boolean>(true);
-  const [resizedImageUrl, setResizedImageUrl] = useState<string | null>(null);
+  const [resizedUrl, setResizedUrl] = useState<string | null>(null);
+  const [width, setWidth] = useState<number>(800);
+  const [height, setHeight] = useState<number>(600);
+  const [quality, setQuality] = useState<number>(90);
+  const [format, setFormat] = useState<string>("jpeg");
   const [isResizing, setIsResizing] = useState<boolean>(false);
-  const [outputFormat, setOutputFormat] = useState<string>("jpeg");
-  const [qualityValue, setQualityValue] = useState<number>(90);
+  const [originalDimensions, setOriginalDimensions] = useState<{width: number, height: number} | null>(null);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    
     if (!file) return;
     
-    if (!file.type.match('image.*')) {
+    // Check if the file is an image
+    if (!file.type.startsWith("image/")) {
       toast({
         title: "Invalid file type",
         description: "Please select an image file (JPEG, PNG, etc.)",
@@ -33,57 +44,45 @@ export default function ImageResizer() {
       return;
     }
     
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result as string;
-      setPreviewUrl(result);
-      setResizedImageUrl(null);
-      
-      // Get original image dimensions
-      const img = new Image();
-      img.onload = () => {
-        setOriginalDimensions({
-          width: img.width,
-          height: img.height
-        });
-        setWidth(img.width);
-        setHeight(img.height);
-      };
-      img.src = result;
-    };
-    reader.readAsDataURL(file);
     setSelectedFile(file);
-  };
-  
-  const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newWidth = parseInt(e.target.value) || 0;
-    setWidth(newWidth);
     
-    if (maintainAspectRatio && originalDimensions) {
-      const aspectRatio = originalDimensions.width / originalDimensions.height;
-      setHeight(Math.round(newWidth / aspectRatio));
+    // Create a preview URL
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    setResizedUrl(null);
+    
+    // Get original dimensions
+    const img = new Image();
+    img.onload = () => {
+      setOriginalDimensions({
+        width: img.width,
+        height: img.height
+      });
+      
+      // Set initial resized dimensions to match original
+      setWidth(img.width);
+      setHeight(img.height);
+    };
+    img.src = url;
+  };
+
+  const resetForm = () => {
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setResizedUrl(null);
+    setOriginalDimensions(null);
+    
+    // Reset the file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
-  
-  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newHeight = parseInt(e.target.value) || 0;
-    setHeight(newHeight);
-    
-    if (maintainAspectRatio && originalDimensions) {
-      const aspectRatio = originalDimensions.width / originalDimensions.height;
-      setWidth(Math.round(newHeight * aspectRatio));
-    }
-  };
-  
-  const handleAspectRatioToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMaintainAspectRatio(e.target.checked);
-  };
-  
-  const handleResize = () => {
-    if (!selectedFile || !previewUrl || !width || !height) {
+
+  const handleResize = async () => {
+    if (!selectedFile || !previewUrl) {
       toast({
-        title: "Missing information",
-        description: "Please select an image and set both width and height",
+        title: "No image selected",
+        description: "Please select an image to resize",
         variant: "destructive",
       });
       return;
@@ -91,110 +90,99 @@ export default function ImageResizer() {
     
     setIsResizing(true);
     
-    // Create a canvas element to resize the image
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
-    
-    if (!ctx) {
-      toast({
-        title: "Error",
-        description: "Could not initialize canvas context",
-        variant: "destructive",
-      });
-      setIsResizing(false);
-      return;
-    }
-    
-    const img = new Image();
-    img.onload = () => {
-      // Draw the image on the canvas with the new dimensions
-      ctx.drawImage(img, 0, 0, width, height);
+    try {
+      // Create a canvas to resize the image
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
       
-      // Convert the canvas to a data URL
-      let mimeType = 'image/jpeg';
-      let quality = qualityValue / 100;
-      
-      switch (outputFormat) {
-        case 'png':
-          mimeType = 'image/png';
-          // PNG doesn't use quality parameter
-          quality = undefined as any;
-          break;
-        case 'webp':
-          mimeType = 'image/webp';
-          break;
-        case 'jpeg':
-        default:
-          mimeType = 'image/jpeg';
-          break;
+      if (!ctx) {
+        throw new Error("Failed to get canvas context");
       }
       
-      const dataUrl = canvas.toDataURL(mimeType, quality);
-      setResizedImageUrl(dataUrl);
-      setIsResizing(false);
+      // Load the image
+      const img = new Image();
+      img.src = previewUrl;
       
-      toast({
-        title: "Image resized successfully",
-        description: `Resized to ${width}×${height} pixels`,
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
       });
-    };
-    
-    img.onerror = () => {
+      
+      // Draw the image on the canvas, resizing it
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      // Convert the canvas to a Blob
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            toast({
+              title: "Error",
+              description: "Failed to resize the image",
+              variant: "destructive",
+            });
+            setIsResizing(false);
+            return;
+          }
+          
+          // Create a URL for the resized image
+          const resizedImageUrl = URL.createObjectURL(blob);
+          setResizedUrl(resizedImageUrl);
+          
+          toast({
+            title: "Success",
+            description: "Image resized successfully",
+          });
+          setIsResizing(false);
+        },
+        `image/${format}`,
+        quality / 100
+      );
+    } catch (error) {
+      console.error("Error resizing image:", error);
       toast({
         title: "Error",
-        description: "Failed to load the image for resizing",
+        description: "Failed to resize the image",
         variant: "destructive",
       });
       setIsResizing(false);
-    };
-    
-    img.src = previewUrl;
-  };
-  
-  const handleDownload = () => {
-    if (!resizedImageUrl) return;
-    
-    // Create a temporary anchor element to download the image
-    const a = document.createElement('a');
-    a.href = resizedImageUrl;
-    a.download = `resized_${selectedFile?.name.split('.')[0] || 'image'}.${outputFormat}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
-  
-  const handleClearImage = () => {
-    setSelectedFile(null);
-    setPreviewUrl(null);
-    setResizedImageUrl(null);
-    setOriginalDimensions(null);
-    setWidth(0);
-    setHeight(0);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
     }
+  };
+
+  const handleDownload = () => {
+    if (!resizedUrl) return;
+    
+    const link = document.createElement("a");
+    link.href = resizedUrl;
+    link.download = `resized-image.${format}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  
+  const handleFormatChange = (value: string) => {
+    setFormat(value);
   };
 
   return (
     <>
       <Helmet>
-        <title>Image Resizer - Resize Images to Exact Dimensions Online | Zyfoox</title>
+        <title>Image Resizer - Resize Photos to Custom Dimensions | Zyfoox</title>
         <meta 
           name="description" 
-          content="Resize images to exact dimensions while maintaining quality. Perfect for social media, websites, and print with support for JPEG, PNG, and WebP formats." 
+          content="Resize your images easily with our free online Image Resizer tool. Change dimensions, maintain aspect ratio, and download in various formats without losing quality." 
         />
         <meta 
           name="keywords" 
-          content="image resizer, resize images online, image size changer, picture resizer, photo resizer tool, resize jpg, resize png, webp converter" 
+          content="image resizer, resize photos, image dimensions, picture resizer, resize image online, free image resizer" 
         />
         <link rel="canonical" href="https://zyfoox.com/tools/image-resizer" />
       </Helmet>
 
       <ToolHero
         title="Image Resizer"
-        description="Resize images to exact dimensions while maintaining quality. Perfect for social media and websites."
+        description="Resize your images to exact dimensions without losing quality. Perfect for social media, web, or print."
         icon={<Image size={24} />}
       />
 
@@ -202,324 +190,280 @@ export default function ImageResizer() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="animate-fade-in">
             <div className="glass-card rounded-xl p-6">
-              <h2 className="text-xl font-semibold mb-4">Upload & Resize</h2>
+              <h2 className="text-xl font-semibold mb-4">Upload & Configure</h2>
               
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">
-                    Upload Image
-                  </label>
-                  <div className="flex items-center justify-center w-full">
-                    <label 
-                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-card/50 hover:bg-card/70 transition-colors border-border"
-                    >
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <FileImage className="w-8 h-8 mb-3 text-primary" />
-                        <p className="mb-2 text-sm text-foreground">
-                          <span className="font-semibold">Click to upload</span> or drag and drop
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          JPEG, PNG, WebP, GIF, etc.
-                        </p>
-                      </div>
-                      <input 
-                        ref={fileInputRef}
-                        type="file" 
-                        className="hidden" 
-                        accept="image/*" 
-                        onChange={handleFileChange}
-                      />
-                    </label>
+                  <Label htmlFor="imageUpload">Upload Image</Label>
+                  <Input
+                    id="imageUpload"
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    className="cursor-pointer"
+                  />
+                </div>
+                
+                {originalDimensions && (
+                  <div className="text-sm text-muted-foreground">
+                    Original size: {originalDimensions.width} × {originalDimensions.height} px
+                  </div>
+                )}
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="width">Width (px)</Label>
+                    <Input
+                      id="width"
+                      type="number"
+                      min="1"
+                      max="10000"
+                      value={width}
+                      onChange={(e) => setWidth(parseInt(e.target.value) || 1)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="height">Height (px)</Label>
+                    <Input
+                      id="height"
+                      type="number"
+                      min="1"
+                      max="10000"
+                      value={height}
+                      onChange={(e) => setHeight(parseInt(e.target.value) || 1)}
+                    />
                   </div>
                 </div>
                 
-                {previewUrl && (
-                  <div className="relative">
-                    <div className="aspect-video bg-card/50 rounded-lg overflow-hidden flex items-center justify-center">
-                      <img 
-                        src={previewUrl} 
-                        alt="Preview" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-                    <button
-                      onClick={handleClearImage}
-                      className="absolute top-2 right-2 bg-background/80 hover:bg-background p-1 rounded-full"
-                    >
-                      <X size={16} />
-                    </button>
-                    {originalDimensions && (
-                      <div className="mt-2 text-sm text-muted-foreground text-center">
-                        Original size: {originalDimensions.width} × {originalDimensions.height} pixels
-                      </div>
-                    )}
-                  </div>
-                )}
+                <div className="space-y-2">
+                  <Label htmlFor="quality">Quality ({quality}%)</Label>
+                  <Input
+                    id="quality"
+                    type="range"
+                    min="10"
+                    max="100"
+                    value={quality}
+                    onChange={(e) => setQuality(parseInt(e.target.value))}
+                  />
+                </div>
                 
-                {originalDimensions && (
-                  <>
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-3">
-                        <input
-                          type="checkbox"
-                          id="aspect-ratio"
-                          className="rounded border-gray-300 text-primary focus:ring-primary"
-                          checked={maintainAspectRatio}
-                          onChange={handleAspectRatioToggle}
-                        />
-                        <label htmlFor="aspect-ratio" className="text-sm">
-                          Maintain aspect ratio
-                        </label>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <label htmlFor="width" className="block text-sm font-medium">
-                            Width (pixels)
-                          </label>
-                          <input
-                            type="number"
-                            id="width"
-                            className="glass-input w-full px-3 py-2 rounded-lg focus:ring-1 focus:ring-primary focus:outline-none"
-                            value={width}
-                            onChange={handleWidthChange}
-                            min="1"
-                            max="10000"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <label htmlFor="height" className="block text-sm font-medium">
-                            Height (pixels)
-                          </label>
-                          <input
-                            type="number"
-                            id="height"
-                            className="glass-input w-full px-3 py-2 rounded-lg focus:ring-1 focus:ring-primary focus:outline-none"
-                            value={height}
-                            onChange={handleHeightChange}
-                            min="1"
-                            max="10000"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <label htmlFor="format" className="block text-sm font-medium">
-                            Output Format
-                          </label>
-                          <select
-                            id="format"
-                            className="glass-input w-full px-3 py-2 rounded-lg focus:ring-1 focus:ring-primary focus:outline-none"
-                            value={outputFormat}
-                            onChange={(e) => setOutputFormat(e.target.value)}
-                          >
-                            <option value="jpeg">JPEG</option>
-                            <option value="png">PNG</option>
-                            <option value="webp">WebP</option>
-                          </select>
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <label htmlFor="quality" className="block text-sm font-medium">
-                            Quality: {qualityValue}%
-                          </label>
-                          <input
-                            type="range"
-                            id="quality"
-                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                            min="10"
-                            max="100"
-                            step="1"
-                            value={qualityValue}
-                            onChange={(e) => setQualityValue(parseInt(e.target.value))}
-                          />
-                        </div>
-                      </div>
-                      
-                      <button
-                        onClick={handleResize}
-                        disabled={isResizing}
-                        className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors disabled:opacity-70 flex items-center justify-center"
-                      >
-                        {isResizing ? (
-                          <>
-                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Resizing...
-                          </>
-                        ) : (
-                          <>
-                            <ArrowDown size={16} className="mr-2" />
-                            Resize Image
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </>
-                )}
+                <div className="space-y-2">
+                  <Label htmlFor="format">Format</Label>
+                  <Select value={format} onValueChange={handleFormatChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select format" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="jpeg">JPEG</SelectItem>
+                        <SelectItem value="png">PNG</SelectItem>
+                        <SelectItem value="webp">WebP</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleResize}
+                    disabled={!selectedFile || isResizing}
+                    className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
+                  >
+                    {isResizing ? "Resizing..." : "Resize Image"}
+                  </button>
+                  
+                  <button
+                    onClick={resetForm}
+                    disabled={!selectedFile}
+                    className="px-4 py-2 bg-destructive text-destructive-foreground rounded-lg font-medium hover:bg-destructive/90 transition-colors disabled:opacity-50"
+                  >
+                    <Trash size={16} />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
           
           <div className="animate-fade-in animate-delay-100">
             <div className="glass-card rounded-xl p-6 h-full flex flex-col">
-              <h2 className="text-xl font-semibold mb-4">Resized Image</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold">Preview</h2>
+                {resizedUrl && (
+                  <button
+                    onClick={handleDownload}
+                    className="px-4 py-2 bg-secondary text-secondary-foreground rounded-lg font-medium hover:bg-secondary/80 transition-colors flex items-center gap-2"
+                  >
+                    <Download size={16} />
+                    Download
+                  </button>
+                )}
+              </div>
               
-              {resizedImageUrl ? (
-                <div className="flex flex-col flex-grow">
-                  <div className="bg-card/50 rounded-lg overflow-hidden flex-grow flex items-center justify-center p-2">
-                    <img 
-                      src={resizedImageUrl} 
-                      alt="Resized" 
-                      className="max-w-full max-h-full object-contain"
-                    />
+              <div className="flex-grow bg-card/50 rounded-lg p-4 flex items-center justify-center overflow-hidden">
+                {resizedUrl ? (
+                  <img
+                    src={resizedUrl}
+                    alt="Resized"
+                    className="max-w-full max-h-[400px] object-contain"
+                  />
+                ) : previewUrl ? (
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="max-w-full max-h-[400px] object-contain"
+                  />
+                ) : (
+                  <div className="text-center text-muted-foreground">
+                    <Image size={48} className="mx-auto mb-2 opacity-20" />
+                    <p>Upload an image to see preview</p>
                   </div>
-                  <div className="mt-4 flex justify-between items-center">
-                    <div className="text-sm text-muted-foreground">
-                      New size: {width} × {height} pixels
-                    </div>
-                    <button
-                      onClick={handleDownload}
-                      className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center"
-                    >
-                      <Download size={16} className="mr-2" />
-                      Download
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex-grow flex flex-col items-center justify-center text-center text-muted-foreground p-8">
-                  <Image size={48} className="mb-4 opacity-20" />
-                  <h3 className="text-lg font-medium mb-2">No Resized Image Yet</h3>
-                  <p>Upload an image and adjust the dimensions, then click "Resize Image" to see the result here.</p>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
         
         <div className="mt-12 prose prose-gray dark:prose-invert max-w-none">
-          <h2>How to Use the Image Resizer</h2>
-          <p>Our Image Resizer is a powerful tool that allows you to precisely adjust the dimensions of your images while maintaining optimal quality. Whether you're preparing images for a website, social media, or print materials, this tool helps you achieve the exact size specifications you need without complicated software.</p>
+          <h2>How to Resize Images Online</h2>
+          <p>Our Image Resizer tool allows you to easily resize your images to specific dimensions for various purposes - social media posts, website graphics, profile pictures, or any other use case. The process is simple, secure, and completely free.</p>
           
           <h3>Simple Steps to Resize Your Images</h3>
           <ol>
-            <li><strong>Upload your image</strong>: Click the upload area or drag and drop an image file (JPEG, PNG, WebP, GIF, etc.).</li>
-            <li><strong>Adjust dimensions</strong>: Enter your desired width and height in pixels. Toggle the "Maintain aspect ratio" option to prevent image distortion.</li>
-            <li><strong>Select output format and quality</strong>: Choose your preferred image format (JPEG, PNG, or WebP) and adjust the quality slider as needed.</li>
-            <li><strong>Click "Resize Image"</strong>: Process your image with the new dimensions and settings.</li>
-            <li><strong>Download the result</strong>: Once resizing is complete, preview the result and download your resized image.</li>
+            <li><strong>Upload your image</strong> - Select any image from your device in common formats like JPEG, PNG, or WebP.</li>
+            <li><strong>Set dimensions</strong> - Enter your desired width and height in pixels. You'll see the original dimensions for reference.</li>
+            <li><strong>Adjust quality</strong> - Use the slider to select the quality level (higher quality means larger file size).</li>
+            <li><strong>Choose format</strong> - Select your preferred output format: JPEG (best for photos), PNG (best for graphics with transparency), or WebP (best overall compression).</li>
+            <li><strong>Resize and download</strong> - Click "Resize Image" and then download your resized image.</li>
           </ol>
           
-          <h3>Image Format Options</h3>
-          <p>Choose the most appropriate format for your needs:</p>
+          <h3>Why Use Our Image Resizer?</h3>
           <ul>
-            <li><strong>JPEG</strong>: Best for photographs and complex images with many colors. Supports adjustable compression for balancing quality and file size.</li>
-            <li><strong>PNG</strong>: Ideal for images that require transparency or have text, lines, and sharp edges. Provides lossless compression but typically results in larger file sizes.</li>
-            <li><strong>WebP</strong>: Modern format that offers superior compression and quality characteristics. Supports both lossy and lossless compression, as well as transparency. Ideal for web use but may not be supported by all platforms.</li>
+            <li><strong>No registration required</strong> - Use the tool instantly without creating an account.</li>
+            <li><strong>Privacy focused</strong> - Your images are processed in your browser and never uploaded to any server.</li>
+            <li><strong>High quality</strong> - Advanced algorithms preserve image quality even when resizing.</li>
+            <li><strong>Multiple formats</strong> - Convert between JPEG, PNG, and WebP while resizing.</li>
+            <li><strong>Adjustable quality</strong> - Fine-tune the balance between image quality and file size.</li>
           </ul>
           
           <h2>Common Image Resizing Scenarios</h2>
-          <p>Our Image Resizer is versatile enough to handle a wide range of use cases:</p>
           
-          <h3>Social Media Images</h3>
-          <p>Each social media platform has specific size requirements for optimal display. Resize your images to these exact dimensions to ensure they look their best:</p>
+          <h3>Social Media Platform Requirements</h3>
+          <p>Different social media platforms require specific image dimensions for optimal display:</p>
           <ul>
-            <li><strong>Facebook Profile Picture</strong>: 170 × 170 pixels</li>
-            <li><strong>Facebook Cover Photo</strong>: 851 × 315 pixels</li>
-            <li><strong>Instagram Post</strong>: 1080 × 1080 pixels (square), 1080 × 1350 pixels (portrait), 1080 × 566 pixels (landscape)</li>
-            <li><strong>Twitter Profile Picture</strong>: 400 × 400 pixels</li>
-            <li><strong>Twitter Header</strong>: 1500 × 500 pixels</li>
-            <li><strong>LinkedIn Profile Picture</strong>: 400 × 400 pixels</li>
-            <li><strong>LinkedIn Cover Photo</strong>: 1584 × 396 pixels</li>
-            <li><strong>YouTube Thumbnail</strong>: 1280 × 720 pixels</li>
+            <li><strong>Instagram profile picture</strong>: 320 × 320 pixels</li>
+            <li><strong>Facebook profile picture</strong>: 170 × 170 pixels</li>
+            <li><strong>Twitter profile image</strong>: 400 × 400 pixels</li>
+            <li><strong>LinkedIn profile photo</strong>: 400 × 400 pixels</li>
+            <li><strong>YouTube channel art</strong>: 2560 × 1440 pixels</li>
           </ul>
           
-          <h3>Website Images</h3>
-          <p>Optimize images for your website to ensure fast loading times and proper display:</p>
+          <h3>Website and Email Optimization</h3>
+          <p>Properly sized images are crucial for website performance and email deliverability:</p>
           <ul>
-            <li><strong>Hero/Banner Images</strong>: Typically 1200-2000 pixels wide, with height depending on your design</li>
-            <li><strong>Product Images</strong>: Usually square (800 × 800 or 1000 × 1000 pixels) for consistency</li>
-            <li><strong>Blog Featured Images</strong>: Often 1200 × 630 pixels to work well with social sharing</li>
-            <li><strong>Thumbnails</strong>: Commonly 150-300 pixels in width and height</li>
+            <li><strong>Website headers</strong>: Typically 1200-2000 pixels wide, height varies</li>
+            <li><strong>Blog post featured images</strong>: 1200 × 630 pixels is common</li>
+            <li><strong>Product photos</strong>: 800 × 800 pixels works well for most e-commerce sites</li>
+            <li><strong>Email images</strong>: Keep under 600 pixels wide for optimal display across email clients</li>
           </ul>
           
-          <h3>Print Materials</h3>
-          <p>For print purposes, images require higher resolution:</p>
+          <h2>Understanding Image Resizing Concepts</h2>
+          
+          <h3>Resolution vs. File Size</h3>
+          <p>When resizing images, it's important to understand the relationship between resolution (dimensions in pixels) and file size:</p>
           <ul>
-            <li><strong>Standard Photo Print</strong>: 1800 × 1200 pixels (6" × 4" at 300 DPI)</li>
-            <li><strong>Business Card</strong>: 1050 × 600 pixels (3.5" × 2" at 300 DPI)</li>
-            <li><strong>Letter/A4 Document</strong>: 2550 × 3300 pixels (8.5" × 11" at 300 DPI)</li>
+            <li>Higher resolution = more detail but larger file size</li>
+            <li>Lower resolution = smaller file size but less detail</li>
+            <li>The quality setting affects compression level, which impacts file size without changing dimensions</li>
           </ul>
           
-          <h2>Benefits of Proper Image Resizing</h2>
-          <p>Taking the time to resize your images correctly offers numerous advantages:</p>
-          
-          <h3>Improved Website Performance</h3>
-          <p>Properly sized images load faster, reducing bounce rates and improving user experience. This can also positively impact your SEO rankings, as page speed is a significant ranking factor for search engines.</p>
-          
-          <h3>Optimal Social Media Presence</h3>
-          <p>Images that match platform specifications display correctly without awkward cropping or distortion, ensuring your visual content makes the intended impact on your audience.</p>
-          
-          <h3>Reduced Storage Requirements</h3>
-          <p>Resizing images to appropriate dimensions can significantly reduce file sizes, saving valuable storage space on your devices and in cloud services.</p>
-          
-          <h3>Professional Appearance</h3>
-          <p>Properly sized images give your website, presentations, and documents a polished, professional look that enhances your brand image and credibility.</p>
-          
-          <h3>Consistent Visual Experience</h3>
-          <p>Using standardized image dimensions across your content creates a cohesive visual experience for your audience, reinforcing your brand identity.</p>
-          
-          <h2>Advanced Image Resizing Tips</h2>
-          <p>For the best results when resizing your images, consider these professional tips:</p>
-          
-          <h3>Understanding Aspect Ratio</h3>
-          <p>The aspect ratio is the proportional relationship between an image's width and height. Maintaining this ratio prevents distortion. When you check "Maintain aspect ratio" in our tool, changing one dimension automatically adjusts the other to preserve the original proportions.</p>
-          
-          <h3>Upscaling vs. Downscaling</h3>
-          <p>Downscaling (making images smaller) generally produces good results with minimal quality loss. Upscaling (making images larger) can introduce pixelation or blurriness since the tool must create new pixel information. For best results, start with the highest resolution source image available.</p>
-          
-          <h3>Balancing Quality and File Size</h3>
-          <p>The quality slider allows you to find the optimal balance between visual quality and file size. For JPEG and WebP formats, higher quality settings preserve more detail but result in larger files. Experiment with different settings to find the best compromise for your specific use case.</p>
-          
-          <h3>Choosing the Right Format</h3>
-          <p>Beyond the basic format descriptions above, consider these additional factors:</p>
+          <h3>Image Formats Explained</h3>
+          <p>Each image format has specific characteristics that make it suitable for different purposes:</p>
           <ul>
-            <li>Use PNG for images with text, logos, or graphics with limited colors</li>
-            <li>Use JPEG for photographs and complex imagery where some quality loss is acceptable</li>
-            <li>Use WebP for web applications where you need the best combination of quality and compression</li>
+            <li><strong>JPEG</strong>: Best for photographs and complex images with gradients. Uses lossy compression that reduces quality slightly but creates smaller files.</li>
+            <li><strong>PNG</strong>: Ideal for graphics, logos, and images that require transparency. Uses lossless compression that maintains quality but results in larger files.</li>
+            <li><strong>WebP</strong>: A modern format that offers both lossy and lossless compression with smaller file sizes than JPEG or PNG. Excellent choice for web use but not supported by all older software.</li>
           </ul>
           
-          <h3>Batch Processing Workflow</h3>
-          <p>If you need to resize multiple images to the same dimensions, establish a workflow: resize one image, download it, then upload the next image without changing your settings. This ensures consistency across all your processed images.</p>
-          
-          <h2>Privacy and Security</h2>
-          <p>Our Image Resizer processes all images directly in your browser, meaning:</p>
+          <h3>Aspect Ratio Considerations</h3>
+          <p>When resizing images, maintaining the correct aspect ratio is often important to prevent distortion:</p>
           <ul>
-            <li>Your images are never uploaded to our servers</li>
-            <li>No one else can access your original or resized images</li>
-            <li>You maintain complete privacy and control over your content</li>
-            <li>The tool works even when you're offline once the page has loaded</li>
+            <li>Common aspect ratios include 1:1 (square), 4:3, 16:9 (widescreen), and 3:2</li>
+            <li>Changing width and height independently can cause images to look stretched or squished</li>
+            <li>For profile pictures and icons, square formats (1:1) are typically preferred</li>
           </ul>
           
-          <h2>Browser Compatibility</h2>
-          <p>Our Image Resizer is designed to work with all modern browsers:</p>
+          <h2>Tips for Perfect Image Resizing</h2>
+          
+          <h3>Start with High-Quality Originals</h3>
+          <p>For best results, always start with the highest quality image available:</p>
           <ul>
-            <li>Google Chrome</li>
-            <li>Mozilla Firefox</li>
-            <li>Safari</li>
-            <li>Microsoft Edge</li>
-            <li>Opera</li>
+            <li>You can reduce an image's dimensions, but you can't effectively enlarge a small image without losing quality</li>
+            <li>Whenever possible, use original, uncompressed images as your starting point</li>
           </ul>
-          <p>For the best experience, we recommend keeping your browser updated to the latest version.</p>
+          
+          <h3>Optimize for Use Case</h3>
+          <p>Consider where and how your resized image will be used:</p>
+          <ul>
+            <li>For web use, prioritize smaller file sizes to improve page load times</li>
+            <li>For printing, maintain higher resolution (at least 300 DPI) and use lossless formats</li>
+            <li>For email attachments, compress more aggressively to avoid delivery issues</li>
+          </ul>
+          
+          <h3>Batch Processing for Multiple Images</h3>
+          <p>If you need to resize many images to the same dimensions:</p>
+          <ul>
+            <li>Process them one after another using the same settings</li>
+            <li>Keep notes of your preferred settings for consistency</li>
+          </ul>
+          
+          <h2>Troubleshooting Common Image Resizing Issues</h2>
+          
+          <h3>Image Appears Blurry After Resizing</h3>
+          <p>If your resized image looks blurry or pixelated:</p>
+          <ul>
+            <li>Avoid enlarging small images beyond their original dimensions</li>
+            <li>Try using a higher quality setting</li>
+            <li>Consider using the PNG format which doesn't use lossy compression</li>
+          </ul>
+          
+          <h3>File Size Too Large After Resizing</h3>
+          <p>If your resized image is still too large for your needs:</p>
+          <ul>
+            <li>Reduce the quality setting (70-80% is often indistinguishable from 100% to the human eye)</li>
+            <li>Switch to a more efficient format like WebP</li>
+            <li>Consider further reducing the dimensions if appropriate for your use case</li>
+          </ul>
+          
+          <h3>Colors Look Different After Resizing</h3>
+          <p>If colors appear different in your resized image:</p>
+          <ul>
+            <li>Try using PNG format which preserves colors more accurately</li>
+            <li>Increase the quality setting when using JPEG format</li>
+            <li>Be aware that different devices and browsers may display colors slightly differently</li>
+          </ul>
+          
+          <h2>Frequently Asked Questions</h2>
+          
+          <h3>Is this image resizer completely free?</h3>
+          <p>Yes, our image resizer is 100% free to use with no hidden costs or watermarks added to your images.</p>
+          
+          <h3>Do you store the images I upload?</h3>
+          <p>No, we don't store your images. All processing happens directly in your browser, and your images are never uploaded to our servers, ensuring complete privacy.</p>
+          
+          <h3>What is the maximum file size I can resize?</h3>
+          <p>The maximum file size depends on your device's memory capabilities. Most modern browsers can handle images up to 20-30MB, but for optimal performance, we recommend keeping input files under 10MB.</p>
+          
+          <h3>Will resizing reduce the quality of my image?</h3>
+          <p>Reducing an image's dimensions always involves some data loss, but our tool uses high-quality algorithms to maintain visual quality. You can adjust the quality setting to find the perfect balance between file size and image quality.</p>
+          
+          <h3>Can I resize copyrighted images?</h3>
+          <p>You should only resize images that you have the rights to use or modify. Resizing copyrighted images without permission may violate copyright laws.</p>
           
           <h2>Conclusion</h2>
-          <p>Our Image Resizer provides a simple yet powerful solution for adjusting image dimensions to meet your specific needs. Whether you're optimizing images for websites, social media, or print, this tool offers the precision and flexibility required for professional results without complex software or technical expertise.</p>
+          <p>Image resizing is an essential skill for anyone working with digital content. Whether you're preparing images for social media, optimizing web graphics, or just organizing your photo collection, our free online Image Resizer tool makes the process quick and simple.</p>
           
-          <p>By following the steps and tips outlined above, you can ensure your images are perfectly sized for their intended purpose while maintaining optimal quality and reasonable file sizes. Start resizing your images today and experience the difference properly sized images can make in your digital and print content.</p>
+          <p>With features like quality adjustment, format conversion, and instant previews, you can achieve professional results without needing expensive photo editing software. Try our Image Resizer today and experience the perfect balance of simplicity and power for all your image resizing needs.</p>
         </div>
       </div>
     </>
