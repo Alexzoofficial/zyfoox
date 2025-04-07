@@ -48,6 +48,7 @@ export default function Sitemap() {
             <li><Link to="/tools/hook-generator" className="text-primary hover:underline">Hook Generator</Link></li>
             <li><Link to="/tools/whatsapp-marketing" className="text-primary hover:underline">WhatsApp Marketing</Link></li>
             <li><Link to="/tools/youtube-branding" className="text-primary hover:underline">YouTube Branding Service</Link></li>
+            <li><Link to="/tools/article-generator" className="text-primary hover:underline">Article Generator</Link></li>
           </ul>
         </section>
         
@@ -75,6 +76,14 @@ export default function Sitemap() {
             <li><Link to="/tools/image-format-converter" className="text-primary hover:underline">Image Format Converter</Link></li>
             <li><Link to="/tools/background-remover" className="text-primary hover:underline">Background Remover</Link></li>
             <li><Link to="/tools/url-shortener" className="text-primary hover:underline">URL Shortener</Link></li>
+            <li><Link to="/tools/age-calculator" className="text-primary hover:underline">Age Calculator</Link></li>
+            <li><Link to="/tools/sip-calculator" className="text-primary hover:underline">SIP Calculator</Link></li>
+            <li><Link to="/tools/image-resizer" className="text-primary hover:underline">Image Resizer</Link></li>
+            <li><Link to="/tools/image-cropper" className="text-primary hover:underline">Image Cropper</Link></li>
+            <li><Link to="/tools/text-to-speech" className="text-primary hover:underline">Text to Speech</Link></li>
+            <li><Link to="/tools/emi-calculator" className="text-primary hover:underline">EMI Calculator</Link></li>
+            <li><Link to="/tools/gst-calculator" className="text-primary hover:underline">GST Calculator</Link></li>
+            <li><Link to="/tools/name-customizer" className="text-primary hover:underline">Name Customizer</Link></li>
           </ul>
         </section>
         

@@ -53,6 +53,15 @@ const ImageFormatConverter = lazy(() => import("./pages/tools/ImageFormatConvert
 // New Tool Pages - Lazy loaded
 const BackgroundRemover = lazy(() => import("./pages/tools/BackgroundRemover"));
 const UrlShortener = lazy(() => import("./pages/tools/UrlShortener"));
+const AgeCalculator = lazy(() => import("./pages/tools/AgeCalculator"));
+const SipCalculator = lazy(() => import("./pages/tools/SipCalculator"));
+const ImageResizer = lazy(() => import("./pages/tools/ImageResizer"));
+const ImageCropper = lazy(() => import("./pages/tools/ImageCropper"));
+const TextToSpeech = lazy(() => import("./pages/tools/TextToSpeech"));
+const EmiCalculator = lazy(() => import("./pages/tools/EmiCalculator"));
+const GstCalculator = lazy(() => import("./pages/tools/GstCalculator"));
+const ArticleGenerator = lazy(() => import("./pages/tools/ArticleGenerator"));
+const NameCustomizer = lazy(() => import("./pages/tools/NameCustomizer"));
 
 const queryClient = new QueryClient();
 
@@ -271,6 +280,78 @@ const App = () => (
                 element={
                   <Suspense fallback={<div>Loading...</div>}>
                     <UrlShortener />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/age-calculator" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <AgeCalculator />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/sip-calculator" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <SipCalculator />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/image-resizer" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <ImageResizer />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/image-cropper" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <ImageCropper />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/text-to-speech" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <TextToSpeech />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/emi-calculator" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <EmiCalculator />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/gst-calculator" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <GstCalculator />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/article-generator" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <ArticleGenerator />
+                  </Suspense>
+                } 
+              />
+              <Route 
+                path="/tools/name-customizer" 
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <NameCustomizer />
                   </Suspense>
                 } 
               />
