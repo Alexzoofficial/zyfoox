@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { Activity } from "lucide-react";
+import { Activity, RotateCw } from "lucide-react";
 import ToolHero from "@/components/tools/ToolHero";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -189,7 +189,7 @@ export default function CricketScore() {
             disabled={loading}
             className="flex items-center gap-2"
           >
-            <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+            <RotateCw size={16} className={loading ? "animate-spin" : ""} />
             Refresh
           </Button>
         </div>
