@@ -1,5 +1,4 @@
-
-import { Brain, MessageSquare, Briefcase, MessagesSquare, Lightbulb, Play, MessageCircle, Video, Download, MoveVertical, Image, Instagram, CirclePlay, Facebook, Music, Twitter, Copy, FileText, FileImage, Database, Key, Link, Clock, Calculator, Crop, Text, Cricket } from "lucide-react";
+import { Brain, MessageSquare, Briefcase, MessagesSquare, Lightbulb, Play, MessageCircle, Video, Download, MoveVertical, Image, Instagram, CirclePlay, Facebook, Music, Twitter, Copy, FileText, FileImage, Database, Key, Link, Clock, Calculator, Crop, Text, Activity } from "lucide-react";
 import ToolCard from "../ui/ToolCard";
 
 export default function ToolsSection() {
@@ -238,7 +237,7 @@ export default function ToolsSection() {
     {
       title: "Cricket Score",
       description: "Get live cricket scores, match schedules, and results from around the world in real-time.",
-      icon: <Cricket size={24} />,
+      icon: <Activity size={24} />,
       path: "/tools/cricket-score",
       delay: 200
     }
