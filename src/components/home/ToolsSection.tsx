@@ -1,5 +1,5 @@
 
-import { Brain, MessageSquare, Briefcase, MessagesSquare, Lightbulb, Play, MessageCircle, Video, Download, MoveVertical, Image, Instagram, CirclePlay, Facebook, Music, Twitter, Copy, FileText, FileImage, Database, Key, Link, Clock, Calculator, Crop, Text } from "lucide-react";
+import { Brain, MessageSquare, Briefcase, MessagesSquare, Lightbulb, Play, MessageCircle, Video, Download, MoveVertical, Image, Instagram, CirclePlay, Facebook, Music, Twitter, Copy, FileText, FileImage, Database, Key, Link, Clock, Calculator, Crop, Text, Cricket } from "lucide-react";
 import ToolCard from "../ui/ToolCard";
 
 export default function ToolsSection() {
@@ -155,6 +155,29 @@ export default function ToolsSection() {
       delay: 400
     },
     
+    // Finance tools
+    {
+      title: "EMI Calculator",
+      description: "Calculate your Equated Monthly Installments for loans with customizable interest rates and terms.",
+      icon: <Calculator size={24} />,
+      path: "/tools/emi-calculator",
+      delay: 300
+    },
+    {
+      title: "SIP Calculator",
+      description: "Plan your investments with our Systematic Investment Plan calculator. Calculate returns and growth.",
+      icon: <Calculator size={24} />,
+      path: "/tools/sip-calculator",
+      delay: 400
+    },
+    {
+      title: "GST Calculator",
+      description: "Calculate GST amounts and final prices with our easy-to-use Goods and Services Tax calculator.",
+      icon: <Calculator size={24} />,
+      path: "/tools/gst-calculator",
+      delay: 400
+    },
+    
     // New tools
     {
       title: "Background Remover",
@@ -178,13 +201,6 @@ export default function ToolsSection() {
       delay: 300
     },
     {
-      title: "SIP Calculator",
-      description: "Plan your investments with our Systematic Investment Plan calculator. Calculate returns and growth.",
-      icon: <Calculator size={24} />,
-      path: "/tools/sip-calculator",
-      delay: 400
-    },
-    {
       title: "Image Resizer",
       description: "Resize images to exact dimensions while maintaining quality. Perfect for social media and websites.",
       icon: <Image size={24} />,
@@ -206,20 +222,6 @@ export default function ToolsSection() {
       delay: 200
     },
     {
-      title: "EMI Calculator",
-      description: "Calculate your Equated Monthly Installments for loans with customizable interest rates and terms.",
-      icon: <Calculator size={24} />,
-      path: "/tools/emi-calculator",
-      delay: 300
-    },
-    {
-      title: "GST Calculator",
-      description: "Calculate GST amounts and final prices with our easy-to-use Goods and Services Tax calculator.",
-      icon: <Calculator size={24} />,
-      path: "/tools/gst-calculator",
-      delay: 400
-    },
-    {
       title: "Article Generator",
       description: "Generate high-quality, SEO-optimized articles on any topic with our AI-powered tool.",
       icon: <FileText size={24} />,
@@ -232,6 +234,13 @@ export default function ToolsSection() {
       icon: <Text size={24} />,
       path: "/tools/name-customizer",
       delay: 100
+    },
+    {
+      title: "Cricket Score",
+      description: "Get live cricket scores, match schedules, and results from around the world in real-time.",
+      icon: <Cricket size={24} />,
+      path: "/tools/cricket-score",
+      delay: 200
     }
   ];
 

@@ -2,475 +2,388 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import ToolHero from "@/components/tools/ToolHero";
-import { Calculator } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import { Calculator, DollarSign, Percent } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FinanceActionButton } from "@/components/finance/FinanceActionButton";
 import { useToast } from "@/hooks/use-toast";
 
+interface GstFormValues {
+  amount: number;
+  gstRate: "5" | "12" | "18" | "28" | "custom";
+  customRate?: number;
+  calculationType: "exclusive" | "inclusive";
+}
+
+const defaultValues: GstFormValues = {
+  amount: 1000,
+  gstRate: "18",
+  customRate: 18,
+  calculationType: "exclusive"
+};
+
 export default function GstCalculator() {
-  const [amount, setAmount] = useState<number>(1000);
-  const [gstRate, setGstRate] = useState<number>(18);
-  const [calculationType, setCalculationType] = useState<"exclusive" | "inclusive">("exclusive");
-  const [sgstCgstIgst, setSgstCgstIgst] = useState<"sgstcgst" | "igst">("sgstcgst");
+  const [gstDetails, setGstDetails] = useState<{
+    originalAmount: number;
+    gstAmount: number;
+    totalAmount: number;
+  }>({
+    originalAmount: 0,
+    gstAmount: 0,
+    totalAmount: 0,
+  });
+  
+  const [calculationHistory, setCalculationHistory] = useState<Array<{
+    values: GstFormValues;
+    results: typeof gstDetails;
+    timestamp: Date;
+  }>>([]);
   
   const { toast } = useToast();
-
-  const validateInputs = () => {
-    if (amount <= 0) {
-      toast({
-        title: "Invalid amount",
-        description: "Amount must be greater than zero",
-        variant: "destructive",
-      });
-      return false;
-    }
-    
-    if (gstRate < 0 || gstRate > 100) {
-      toast({
-        title: "Invalid GST rate",
-        description: "GST rate must be between 0 and 100",
-        variant: "destructive",
-      });
-      return false;
-    }
-    
-    return true;
-  };
-
-  // Calculate GST amount and total
-  const calculateGst = () => {
-    if (!validateInputs()) return { gstAmount: 0, totalAmount: 0, baseAmount: 0 };
-    
+  
+  const form = useForm<GstFormValues>({
+    defaultValues
+  });
+  
+  const watchGstRate = form.watch("gstRate");
+  const watchCalculationType = form.watch("calculationType");
+  
+  const calculateGST = (values: GstFormValues) => {
+    const amount = values.amount;
+    const rate = values.gstRate === "custom" ? values.customRate! : Number(values.gstRate);
+    let originalAmount = 0;
     let gstAmount = 0;
     let totalAmount = 0;
-    let baseAmount = 0;
     
-    if (calculationType === "exclusive") {
-      // GST is added to the base amount
-      baseAmount = amount;
-      gstAmount = (amount * gstRate) / 100;
+    if (values.calculationType === "exclusive") {
+      // GST is added to the amount
+      originalAmount = amount;
+      gstAmount = (amount * rate) / 100;
       totalAmount = amount + gstAmount;
     } else {
       // GST is included in the amount
+      originalAmount = (amount * 100) / (100 + rate);
+      gstAmount = amount - originalAmount;
       totalAmount = amount;
-      baseAmount = (amount * 100) / (100 + gstRate);
-      gstAmount = totalAmount - baseAmount;
     }
     
-    return { gstAmount, totalAmount, baseAmount };
+    setGstDetails({
+      originalAmount,
+      gstAmount,
+      totalAmount,
+    });
+    
+    return { originalAmount, gstAmount, totalAmount };
   };
   
-  const result = calculateGst();
+  const onSubmit = (values: GstFormValues) => {
+    const results = calculateGST(values);
+    
+    // Add to history
+    setCalculationHistory(prev => [
+      {
+        values,
+        results,
+        timestamp: new Date()
+      },
+      ...prev
+    ]);
+    
+    toast({
+      title: "GST Calculated Successfully",
+      description: `GST calculation complete using ${values.calculationType === "exclusive" ? "exclusive" : "inclusive"} method.`,
+    });
+  };
   
-  // Format currency
-  const formatCurrency = (value: number) => {
+  const addNewCalculation = () => {
+    form.reset(defaultValues);
+    setGstDetails({
+      originalAmount: 0,
+      gstAmount: 0,
+      totalAmount: 0,
+    });
+    
+    toast({
+      title: "New Calculation Started",
+      description: "Default values have been set. You can now adjust and calculate GST.",
+    });
+  };
+  
+  const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
       maximumFractionDigits: 2
-    }).format(value);
+    }).format(amount);
   };
-
+  
   return (
     <>
       <Helmet>
-        <title>GST Calculator - Calculate GST Tax, Invoice Amounts | Zyfoox</title>
-        <meta 
-          name="description" 
-          content="Calculate GST amounts accurately with our free GST Calculator. Compute inclusive, exclusive GST, SGST, CGST & IGST for invoices and billing." 
+        <title>GST Calculator - Calculate Goods and Services Tax | Zyfoox</title>
+        <meta
+          name="description"
+          content="Calculate GST (Goods and Services Tax) with our free calculator. Easily calculate inclusive or exclusive GST for any amount with different tax rates."
         />
-        <meta 
-          name="keywords" 
-          content="GST calculator, GST tax calculator, CGST calculator, SGST calculator, IGST calculator, inclusive GST, exclusive GST, invoice calculator, tax calculator India" 
-        />
-        <link rel="canonical" href="https://zyfoox.com/tools/gst-calculator" />
       </Helmet>
 
       <ToolHero
         title="GST Calculator"
-        description="Calculate GST amounts and invoice values with our simple and accurate GST Calculator."
-        icon={<Calculator size={24} />}
+        description="Calculate Goods and Services Tax (GST) for any amount with different tax slabs"
+        icon={<Calculator size={28} />}
       />
 
-      <div className="container mx-auto max-w-4xl px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="animate-fade-in">
-            <div className="glass-card rounded-xl p-6">
-              <h2 className="text-xl font-semibold mb-4">Calculate GST</h2>
-              
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="calculation-type" className="block text-sm font-medium">
-                      Calculation Type
-                    </label>
-                    <div className="flex">
-                      <button
-                        type="button"
-                        className={`flex-1 py-2 px-4 text-center rounded-l-lg transition-colors ${
-                          calculationType === "exclusive"
-                            ? "bg-primary text-white"
-                            : "bg-primary/10 text-primary hover:bg-primary/20"
-                        }`}
-                        onClick={() => setCalculationType("exclusive")}
-                      >
-                        Add GST (Exclusive)
-                      </button>
-                      <button
-                        type="button"
-                        className={`flex-1 py-2 px-4 text-center rounded-r-lg transition-colors ${
-                          calculationType === "inclusive"
-                            ? "bg-primary text-white"
-                            : "bg-primary/10 text-primary hover:bg-primary/20"
-                        }`}
-                        onClick={() => setCalculationType("inclusive")}
-                      >
-                        Remove GST (Inclusive)
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label htmlFor="gst-type" className="block text-sm font-medium">
-                      GST Type
-                    </label>
-                    <div className="flex">
-                      <button
-                        type="button"
-                        className={`flex-1 py-2 px-4 text-center rounded-l-lg transition-colors ${
-                          sgstCgstIgst === "sgstcgst"
-                            ? "bg-primary text-white"
-                            : "bg-primary/10 text-primary hover:bg-primary/20"
-                        }`}
-                        onClick={() => setSgstCgstIgst("sgstcgst")}
-                      >
-                        CGST & SGST
-                      </button>
-                      <button
-                        type="button"
-                        className={`flex-1 py-2 px-4 text-center rounded-r-lg transition-colors ${
-                          sgstCgstIgst === "igst"
-                            ? "bg-primary text-white"
-                            : "bg-primary/10 text-primary hover:bg-primary/20"
-                        }`}
-                        onClick={() => setSgstCgstIgst("igst")}
-                      >
-                        IGST
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label htmlFor="amount" className="block text-sm font-medium">
-                      {calculationType === "exclusive" ? "Amount (without GST)" : "Amount (with GST)"}
-                    </label>
-                    <input
-                      type="number"
-                      id="amount"
-                      className="glass-input w-full px-3 py-2 rounded-lg focus:ring-1 focus:ring-primary focus:outline-none"
-                      value={amount}
-                      onChange={(e) => setAmount(Number(e.target.value) || 0)}
-                      min="0"
-                      step="1"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label htmlFor="gst-rate" className="block text-sm font-medium">
-                      GST Rate (%)
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {[3, 5, 12, 18, 28].map((rate) => (
-                        <button
-                          key={rate}
-                          type="button"
-                          className={`py-1 px-3 text-sm rounded-lg transition-colors ${
-                            gstRate === rate
-                              ? "bg-primary text-white"
-                              : "bg-primary/10 text-primary hover:bg-primary/20"
-                          }`}
-                          onClick={() => setGstRate(rate)}
-                        >
-                          {rate}%
-                        </button>
-                      ))}
-                      <input
-                        type="number"
-                        id="gst-rate"
-                        className="glass-input w-20 px-3 py-1 rounded-lg focus:ring-1 focus:ring-primary focus:outline-none text-sm"
-                        value={gstRate}
-                        onChange={(e) => setGstRate(Number(e.target.value) || 0)}
-                        min="0"
-                        max="100"
-                        step="0.1"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="animate-fade-in animate-delay-100">
-            <div className="glass-card rounded-xl p-6 h-full">
-              <h2 className="text-xl font-semibold mb-4">GST Calculation Results</h2>
-              
-              <div className="space-y-6">
-                <div className="bg-card/50 rounded-lg p-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Base Amount</p>
-                      <p className="text-xl font-semibold">{formatCurrency(result.baseAmount)}</p>
-                    </div>
-                    
-                    {sgstCgstIgst === "sgstcgst" ? (
-                      <>
-                        <div>
-                          <p className="text-sm text-muted-foreground">CGST @ {gstRate / 2}%</p>
-                          <p className="text-xl font-semibold">{formatCurrency(result.gstAmount / 2)}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">SGST @ {gstRate / 2}%</p>
-                          <p className="text-xl font-semibold">{formatCurrency(result.gstAmount / 2)}</p>
-                        </div>
-                      </>
-                    ) : (
-                      <div>
-                        <p className="text-sm text-muted-foreground">IGST @ {gstRate}%</p>
-                        <p className="text-xl font-semibold">{formatCurrency(result.gstAmount)}</p>
-                      </div>
-                    )}
-                    
-                    <div>
-                      <p className="text-sm text-muted-foreground">Total GST</p>
-                      <p className="text-xl font-semibold">{formatCurrency(result.gstAmount)}</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-primary/10 rounded-lg p-4">
-                  <p className="text-sm text-muted-foreground">Total Amount (including GST)</p>
-                  <p className="text-2xl font-bold text-primary">{formatCurrency(result.totalAmount)}</p>
-                </div>
-                
-                <div className="bg-card/20 rounded-lg p-4">
-                  <h3 className="text-lg font-medium mb-2">Invoice Breakup</h3>
-                  <table className="w-full text-sm">
-                    <tbody>
-                      <tr className="border-b">
-                        <td className="py-2">Base Amount</td>
-                        <td className="py-2 text-right">{formatCurrency(result.baseAmount)}</td>
-                      </tr>
-                      {sgstCgstIgst === "sgstcgst" ? (
-                        <>
-                          <tr className="border-b">
-                            <td className="py-2">CGST @ {gstRate / 2}%</td>
-                            <td className="py-2 text-right">{formatCurrency(result.gstAmount / 2)}</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2">SGST @ {gstRate / 2}%</td>
-                            <td className="py-2 text-right">{formatCurrency(result.gstAmount / 2)}</td>
-                          </tr>
-                        </>
-                      ) : (
-                        <tr className="border-b">
-                          <td className="py-2">IGST @ {gstRate}%</td>
-                          <td className="py-2 text-right">{formatCurrency(result.gstAmount)}</td>
-                        </tr>
-                      )}
-                      <tr className="font-medium">
-                        <td className="py-2">Total Amount</td>
-                        <td className="py-2 text-right">{formatCurrency(result.totalAmount)}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">Calculate GST</h2>
+          <FinanceActionButton onClick={addNewCalculation} label="New Calculation" />
         </div>
         
-        <div className="mt-12 prose prose-gray dark:prose-invert max-w-none">
-          <h2>How to Use the GST Calculator</h2>
-          <p>Our GST (Goods and Services Tax) Calculator is a comprehensive tool designed to help businesses, professionals, and individuals accurately calculate GST amounts for invoices, billing, and financial planning. Whether you need to add GST to a base amount or extract GST from an inclusive figure, our calculator simplifies the process and provides detailed breakdowns.</p>
+        <Tabs defaultValue="calculator" className="w-full">
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-6">
+            <TabsTrigger value="calculator">Calculator</TabsTrigger>
+            <TabsTrigger value="history">Calculation History</TabsTrigger>
+          </TabsList>
           
-          <h3>Easy Steps to Calculate GST</h3>
-          <ol>
-            <li><strong>Select the calculation type</strong>: Choose between "Add GST" (exclusive calculation) or "Remove GST" (inclusive calculation) based on your needs.</li>
-            <li><strong>Choose the GST type</strong>: Select between CGST & SGST (for intra-state transactions) or IGST (for inter-state transactions).</li>
-            <li><strong>Enter the amount</strong>: Input either the base amount (without GST) or the total amount (with GST), depending on your selected calculation type.</li>
-            <li><strong>Select the GST rate</strong>: Choose from the common GST rates (3%, 5%, 12%, 18%, 28%) or input a custom rate.</li>
-            <li><strong>View the results</strong>: The calculator instantly displays the base amount, GST components, and the total amount, along with a detailed invoice breakup.</li>
-          </ol>
+          <TabsContent value="calculator">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <Card className="lg:col-span-7">
+                <CardHeader>
+                  <CardTitle>GST Calculator</CardTitle>
+                  <CardDescription>
+                    Enter the details below to calculate GST (Goods and Services Tax)
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                      <FormField
+                        control={form.control}
+                        name="calculationType"
+                        render={({ field }) => (
+                          <FormItem className="space-y-3">
+                            <FormLabel>Calculation Type</FormLabel>
+                            <FormControl>
+                              <RadioGroup
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                className="flex flex-col space-y-1"
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <RadioGroupItem value="exclusive" id="exclusive" />
+                                  <Label htmlFor="exclusive">
+                                    Add GST to amount (Exclusive)
+                                  </Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <RadioGroupItem value="inclusive" id="inclusive" />
+                                  <Label htmlFor="inclusive">
+                                    Extract GST from amount (Inclusive)
+                                  </Label>
+                                </div>
+                              </RadioGroup>
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="amount"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="flex items-center gap-2">
+                              <DollarSign size={16} /> 
+                              {watchCalculationType === "exclusive" 
+                                ? "Original Amount (₹)" 
+                                : "Amount Including GST (₹)"}
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min={1}
+                                {...field}
+                                onChange={(e) => field.onChange(Number(e.target.value))}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="gstRate"
+                        render={({ field }) => (
+                          <FormItem className="space-y-3">
+                            <FormLabel className="flex items-center gap-2">
+                              <Percent size={16} /> GST Rate
+                            </FormLabel>
+                            <FormControl>
+                              <RadioGroup
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                className="grid grid-cols-2 sm:grid-cols-5 gap-2"
+                              >
+                                <div className="flex items-center space-x-2 justify-center border rounded-md py-2 px-4 hover:bg-muted/50 cursor-pointer">
+                                  <RadioGroupItem value="5" id="r5" className="sr-only" />
+                                  <Label htmlFor="r5" className="cursor-pointer font-medium">5%</Label>
+                                </div>
+                                <div className="flex items-center space-x-2 justify-center border rounded-md py-2 px-4 hover:bg-muted/50 cursor-pointer">
+                                  <RadioGroupItem value="12" id="r12" className="sr-only" />
+                                  <Label htmlFor="r12" className="cursor-pointer font-medium">12%</Label>
+                                </div>
+                                <div className="flex items-center space-x-2 justify-center border rounded-md py-2 px-4 hover:bg-muted/50 cursor-pointer">
+                                  <RadioGroupItem value="18" id="r18" className="sr-only" />
+                                  <Label htmlFor="r18" className="cursor-pointer font-medium">18%</Label>
+                                </div>
+                                <div className="flex items-center space-x-2 justify-center border rounded-md py-2 px-4 hover:bg-muted/50 cursor-pointer">
+                                  <RadioGroupItem value="28" id="r28" className="sr-only" />
+                                  <Label htmlFor="r28" className="cursor-pointer font-medium">28%</Label>
+                                </div>
+                                <div className="flex items-center space-x-2 justify-center border rounded-md py-2 px-4 hover:bg-muted/50 cursor-pointer">
+                                  <RadioGroupItem value="custom" id="rcustom" className="sr-only" />
+                                  <Label htmlFor="rcustom" className="cursor-pointer font-medium">Custom</Label>
+                                </div>
+                              </RadioGroup>
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      {watchGstRate === "custom" && (
+                        <FormField
+                          control={form.control}
+                          name="customRate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Custom GST Rate (%)</FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  min={0}
+                                  max={100}
+                                  step={0.1}
+                                  {...field}
+                                  onChange={(e) => field.onChange(Number(e.target.value))}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      )}
+
+                      <Button type="submit" className="w-full">Calculate GST</Button>
+                    </form>
+                  </Form>
+                </CardContent>
+              </Card>
+
+              <Card className="lg:col-span-5 bg-muted/10">
+                <CardHeader>
+                  <CardTitle>GST Breakdown</CardTitle>
+                  <CardDescription>Based on your inputs</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">
+                          {watchCalculationType === "exclusive"
+                            ? "Original Amount"
+                            : "Amount without GST"}
+                        </span>
+                        <span className="font-medium">{formatCurrency(gstDetails.originalAmount)}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">GST Amount</span>
+                        <span className="font-medium text-blue-600 dark:text-blue-400">{formatCurrency(gstDetails.gstAmount)}</span>
+                      </div>
+                      <div className="h-px bg-border my-3"></div>
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold">Total Amount</span>
+                        <span className="font-bold text-lg">{formatCurrency(gstDetails.totalAmount)}</span>
+                      </div>
+                      
+                      {gstDetails.originalAmount > 0 && (
+                        <div className="mt-4 p-3 bg-card rounded-lg">
+                          <p className="text-sm">
+                            GST Rate: <span className="font-medium">
+                              {watchGstRate === "custom" ? form.getValues().customRate : watchGstRate}%
+                            </span>
+                          </p>
+                          <p className="text-sm mt-1">
+                            Calculation Method: <span className="font-medium">
+                              {watchCalculationType === "exclusive" ? "Exclusive (Add GST)" : "Inclusive (Extract GST)"}
+                            </span>
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
           
-          <h3>Understanding GST Calculation Results</h3>
-          <p>The GST Calculator provides detailed information:</p>
-          <ul>
-            <li><strong>Base Amount</strong>: The value of goods or services before applying GST.</li>
-            <li><strong>CGST & SGST</strong>: For intra-state transactions, GST is divided equally between Central GST and State GST.</li>
-            <li><strong>IGST</strong>: For inter-state transactions, Integrated GST is applied as a single tax.</li>
-            <li><strong>Total GST</strong>: The combined tax amount.</li>
-            <li><strong>Total Amount</strong>: The final invoice value including the base amount and GST.</li>
-            <li><strong>Invoice Breakup</strong>: A detailed itemization showing all components of the invoice, perfect for billing purposes.</li>
-          </ul>
-          
-          <h2>Understanding India's GST System</h2>
-          <p>The Goods and Services Tax (GST) was introduced in India on July 1, 2017, as a comprehensive indirect tax that replaced multiple cascading taxes levied by the central and state governments. Understanding the fundamentals of GST is essential for compliance and accurate financial planning.</p>
-          
-          <h3>Types of GST in India</h3>
-          <p>India's GST system has been structured as a dual GST model, which includes:</p>
-          <ul>
-            <li><strong>CGST (Central Goods and Services Tax)</strong>: Collected by the Central Government on intra-state sales.</li>
-            <li><strong>SGST (State Goods and Services Tax)</strong>: Collected by the State Government on intra-state sales.</li>
-            <li><strong>IGST (Integrated Goods and Services Tax)</strong>: Collected by the Central Government on inter-state sales and imports.</li>
-            <li><strong>UTGST (Union Territory Goods and Services Tax)</strong>: Collected by Union Territory Governments for intra-UT transactions.</li>
-          </ul>
-          
-          <h3>GST Rate Structure</h3>
-          <p>GST rates in India are divided into multiple slabs based on the essential nature of goods and services:</p>
-          <ul>
-            <li><strong>0% (Exempt)</strong>: Essential items like fresh fruits, vegetables, milk, and education services.</li>
-            <li><strong>3%</strong>: Precious metals like gold and silver.</li>
-            <li><strong>5%</strong>: Essential commodities like branded paneer, frozen vegetables, and specific services.</li>
-            <li><strong>12%</strong>: Items like processed food, business class air tickets, and certain services.</li>
-            <li><strong>18%</strong>: Most goods and services fall under this category, including electronics, telecom services, and financial services.</li>
-            <li><strong>28%</strong>: Luxury items and sin goods like automobiles, tobacco products, and high-end consumer durables.</li>
-          </ul>
-          
-          <h2>GST Calculation Methods Explained</h2>
-          <p>There are two primary methods for calculating GST:</p>
-          
-          <h3>Exclusive GST Calculation (Adding GST)</h3>
-          <p>When you have the base amount and need to calculate the total amount after adding GST:</p>
-          <p><strong>GST Amount = Base Amount × GST Rate / 100</strong></p>
-          <p><strong>Total Amount = Base Amount + GST Amount</strong></p>
-          <p>Example: For a product worth ₹1,000 with an 18% GST rate:
-          <br />GST Amount = ₹1,000 × 18 / 100 = ₹180
-          <br />Total Amount = ₹1,000 + ₹180 = ₹1,180</p>
-          
-          <h3>Inclusive GST Calculation (Removing GST)</h3>
-          <p>When you have the total amount (including GST) and need to calculate the base amount:</p>
-          <p><strong>Base Amount = Total Amount × 100 / (100 + GST Rate)</strong></p>
-          <p><strong>GST Amount = Total Amount - Base Amount</strong></p>
-          <p>Example: For a product with a total price of ₹1,180 including 18% GST:
-          <br />Base Amount = ₹1,180 × 100 / (100 + 18) = ₹1,180 × 100 / 118 = ₹1,000
-          <br />GST Amount = ₹1,180 - ₹1,000 = ₹180</p>
-          
-          <h2>Intra-State vs. Inter-State Transactions</h2>
-          <p>Understanding the difference between intra-state and inter-state transactions is crucial for applying the correct GST components:</p>
-          
-          <h3>Intra-State Transactions (CGST & SGST)</h3>
-          <p>When goods or services are supplied within the same state, GST is divided equally between CGST and SGST:</p>
-          <p>For an 18% GST rate:
-          <br />CGST = 9% of the base amount
-          <br />SGST = 9% of the base amount</p>
-          <p>The total GST remains 18%, but it's split equally between central and state governments.</p>
-          
-          <h3>Inter-State Transactions (IGST)</h3>
-          <p>When goods or services are supplied between different states or imported, IGST is applicable:</p>
-          <p>For an 18% GST rate:
-          <br />IGST = 18% of the base amount</p>
-          <p>The entire GST goes to the central government, which later distributes the state's share.</p>
-          
-          <h2>GST Input Tax Credit System</h2>
-          <p>One of the key features of the GST system is the Input Tax Credit (ITC) mechanism, which helps avoid tax cascading:</p>
-          
-          <h3>What is Input Tax Credit?</h3>
-          <p>Input Tax Credit is the credit a business can claim for GST paid on purchases used for business purposes. It allows businesses to deduct the tax they've paid on inputs from the tax they collect on outputs, effectively paying tax only on the value they add.</p>
-          
-          <h3>ITC Eligibility Conditions</h3>
-          <p>To claim ITC, businesses must meet several conditions:</p>
-          <ul>
-            <li>Possession of tax invoice or debit note or other prescribed documents</li>
-            <li>Receipt of goods or services</li>
-            <li>Tax actually paid to the government by the supplier</li>
-            <li>Filing of GST returns</li>
-            <li>For invoices over ₹50,000, the recipient must verify that the supplier has reported the transaction</li>
-          </ul>
-          
-          <h3>ITC Calculation Example</h3>
-          <p>Consider a manufacturer who:</p>
-          <ul>
-            <li>Purchases raw materials worth ₹50,000 + ₹9,000 GST (18%)</li>
-            <li>Sells finished goods worth ₹80,000 + ₹14,400 GST (18%)</li>
-          </ul>
-          <p>Without ITC, the manufacturer would pay ₹14,400 in output tax.<br />
-          With ITC, the manufacturer can claim credit for the ₹9,000 input tax, resulting in a net GST liability of ₹5,400 (₹14,400 - ₹9,000).</p>
-          
-          <h2>GST Compliance for Businesses</h2>
-          <p>Understanding GST compliance requirements is essential for businesses operating in India:</p>
-          
-          <h3>Registration Requirements</h3>
-          <p>Businesses need to register for GST if:</p>
-          <ul>
-            <li>Their aggregate turnover exceeds ₹20 lakhs (₹10 lakhs for special category states) in a financial year</li>
-            <li>They engage in inter-state supply of goods or services</li>
-            <li>They are required to pay tax under reverse charge mechanism</li>
-            <li>They are e-commerce operators or suppliers through e-commerce platforms</li>
-          </ul>
-          
-          <h3>Return Filing</h3>
-          <p>GST-registered businesses must file various returns:</p>
-          <ul>
-            <li>GSTR-1: Details of outward supplies (monthly/quarterly)</li>
-            <li>GSTR-3B: Summary return with payment (monthly/quarterly)</li>
-            <li>GSTR-9: Annual return (yearly)</li>
-            <li>Additional forms based on business type and transactions</li>
-          </ul>
-          
-          <h3>Invoice Requirements</h3>
-          <p>GST invoices must include specific information:</p>
-          <ul>
-            <li>Invoice number and date</li>
-            <li>Customer name, address, and GSTIN (if registered)</li>
-            <li>Item details with HSN codes</li>
-            <li>Taxable value and GST rate</li>
-            <li>CGST, SGST, or IGST amounts separately</li>
-            <li>Total invoice value</li>
-            <li>Signature of the supplier or authorized representative</li>
-          </ul>
-          
-          <h2>Recent Updates and Changes in GST</h2>
-          <p>The GST system in India continues to evolve with periodic updates and changes:</p>
-          
-          <h3>E-invoicing System</h3>
-          <p>E-invoicing has been implemented for businesses with turnover above specified thresholds, making invoice reporting and compliance more automated and transparent.</p>
-          
-          <h3>New Return Filing System</h3>
-          <p>The government has introduced simplified return filing mechanisms to ease compliance burdens for small businesses.</p>
-          
-          <h3>Rate Rationalization</h3>
-          <p>The GST Council periodically reviews and rationalizes tax rates for various goods and services based on economic considerations and stakeholder feedback.</p>
-          
-          <h3>Input Tax Credit Restrictions</h3>
-          <p>Certain restrictions on claiming input tax credit have been introduced to prevent fraud and ensure proper tax compliance.</p>
-          
-          <h2>Benefits of Using Our GST Calculator</h2>
-          <p>Our GST Calculator offers numerous advantages for businesses and individuals:</p>
-          
-          <h3>Accuracy and Precision</h3>
-          <p>The calculator eliminates manual calculation errors, ensuring accurate tax computations for invoicing and financial reporting.</p>
-          
-          <h3>Time Efficiency</h3>
-          <p>Save valuable time by instantly calculating GST amounts for multiple transactions without complex manual calculations.</p>
-          
-          <h3>Dual Calculation Methods</h3>
-          <p>Easily switch between exclusive and inclusive GST calculations based on your specific needs—whether you're creating invoices or analyzing purchases.</p>
-          
-          <h3>Comprehensive Tax Breakdown</h3>
-          <p>Get detailed breakdowns of CGST, SGST, and IGST components, helping you prepare accurate invoices and maintain proper financial records.</p>
-          
-          <h3>User-Friendly Interface</h3>
-          <p>The intuitive design makes GST calculations accessible to everyone, regardless of their taxation knowledge or expertise.</p>
-          
-          <h3>No Registration Required</h3>
-          <p>Use the calculator freely without registration, login, or software installation, ensuring privacy and convenience.</p>
-          
-          <h2>Conclusion</h2>
-          <p>Our GST Calculator is an essential tool for businesses, professionals, and individuals navigating India's GST system. By providing accurate calculations, detailed breakdowns, and instant results, it simplifies tax compliance and financial planning.</p>
-          
-          <p>Whether you're a small business owner creating invoices, an accountant preparing financial reports, or an individual verifying tax amounts, this calculator offers the precision and convenience you need. Use it regularly to ensure GST accuracy in your financial transactions and maintain compliance with India's tax regulations.</p>
-          
-          <p>Remember that while this calculator provides accurate GST calculations based on the information entered, it's always advisable to consult with a qualified tax professional for complex taxation matters and specific compliance requirements.</p>
-        </div>
+          <TabsContent value="history">
+            <Card>
+              <CardHeader>
+                <CardTitle>Calculation History</CardTitle>
+                <CardDescription>
+                  Your recent GST calculations
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {calculationHistory.length === 0 ? (
+                  <div className="text-center py-6 text-muted-foreground">
+                    No calculations yet. Make your first calculation to see it here.
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {calculationHistory.map((item, index) => (
+                      <div key={index} className="p-4 border rounded-lg">
+                        <div className="flex justify-between items-center mb-2">
+                          <div>
+                            <span className="font-medium">
+                              {item.values.calculationType === "exclusive"
+                                ? "Original Amount:"
+                                : "Amount with GST:"}
+                            </span> {formatCurrency(item.values.amount)}
+                          </div>
+                          <div className="text-sm bg-primary/10 text-primary px-2 py-1 rounded">
+                            GST: {item.values.gstRate === "custom" 
+                              ? item.values.customRate 
+                              : item.values.gstRate}%
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div>
+                            <span className="text-muted-foreground">Amount without GST:</span>
+                            <p className="font-medium">{formatCurrency(item.results.originalAmount)}</p>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">GST Amount:</span>
+                            <p className="font-medium">{formatCurrency(item.results.gstAmount)}</p>
+                          </div>
+                          <div className="col-span-2">
+                            <span className="text-muted-foreground">Total Amount:</span>
+                            <p className="font-medium">{formatCurrency(item.results.totalAmount)}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </>
   );
